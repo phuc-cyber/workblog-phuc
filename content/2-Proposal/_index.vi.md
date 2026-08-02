@@ -6,134 +6,136 @@ chapter: false
 pre: " <b> 2. </b> "
 ---
 
-# Đề xuất xây dựng hệ thống Car Parking trên AWS
+# Bản đề xuất
+
+# Đề xuất triển khai dự án Smart Parking trên AWS
 
 ## 1. Tên dự án
 
-**Xây dựng hệ thống quản lý bãi đỗ xe thông minh Car Parking kết hợp dịch vụ AWS**
+**Triển khai nền tảng quản lý bãi đỗ xe thông minh bằng các dịch vụ AWS**
 
-Dự án hướng tới một nền tảng web hỗ trợ người dùng đặt trước vị trí đỗ xe và giúp quản trị viên theo dõi hoạt động của bãi xe. Hệ thống gồm giao diện Next.js, API FastAPI, cơ sở dữ liệu PostgreSQL, mã QR theo booking và các dịch vụ AWS dành cho xác thực, lưu trữ ảnh, giám sát và phân tích trạng thái vị trí đỗ.
+Dự án tập trung triển khai một nền tảng web hỗ trợ đặt chỗ, vận hành cổng bằng QR, theo dõi phiên gửi xe và giám sát dành cho Admin. Hệ thống gồm frontend Next.js + Fluent UI, API nghiệp vụ FastAPI, dữ liệu PostgreSQL, ảnh bằng chứng trên S3, group Cognito và luồng phân tích trạng thái vị trí bằng AI.
 
-## 2. Bối cảnh lựa chọn
+## 2. Bối cảnh và động lực
 
-Việc quản lý bãi xe bằng vé giấy và thao tác thủ công gây khó khăn khi cần kiểm tra vị trí còn trống, đối chiếu xe ra/vào hoặc tra cứu lịch sử. Người dùng cũng không thể chủ động chọn vị trí và thời gian gửi xe trước khi đến bãi.
+Một hệ thống bãi xe thực tế không chỉ cần hiển thị danh sách vị trí mà còn phải lưu trạng thái booking, xác minh sự kiện xe vào/ra, lưu ảnh bằng chứng và cung cấp lịch sử vận hành có thể truy vết. Vé giấy và các record rời rạc khiến việc xác định vị trí còn trống, kiểm tra một sự kiện xe hoặc tìm nguyên nhân ngoại lệ trở nên khó khăn.
 
-Car Parking được đề xuất nhằm số hóa quy trình này bằng một ứng dụng có hai vai trò **User** và **Admin**. Dự án đồng thời tạo điều kiện thực hành cách kết nối một hệ thống web với **Amazon RDS**, **Amazon S3**, **Amazon Cognito**, **AWS Lambda**, **Amazon Rekognition**, **CloudWatch**, **AWS CDK** và **CloudFormation**.
+Việc triển khai Smart Parking với AWS minh họa cách **Amazon RDS**, **Amazon S3**, **Amazon Cognito**, **AWS Lambda**, **Amazon Rekognition**, **IAM**, **AWS CDK**, **CloudFormation** và **CloudWatch** kết hợp trong một ứng dụng thực tế. Frontend cùng FastAPI có thể chạy local hoặc trên VPS trong khi vẫn sử dụng các tài nguyên AWS được quản lý.
 
-## 3. Mục tiêu thực hiện
+## 3. Mục tiêu
 
-- Xây dựng giao diện riêng cho người dùng và quản trị viên bằng **Next.js + Fluent UI**.
-- Cho phép người dùng chọn bãi xe, thời gian và vị trí còn trống.
-- Tạo booking cùng mã QR có vòng đời `PENDING`, `ACTIVE`, `CLOSED`, `CANCELLED` hoặc `EXPIRED`.
-- Hỗ trợ Admin xử lý check-in/check-out bằng QR, ảnh xe và biển số nhập từ ảnh quan sát.
-- Hiển thị sơ đồ vị trí theo trạng thái `AVAILABLE`, `RESERVED` và `OCCUPIED`.
-- Lưu user, booking, QR, phiên gửi xe, phí và audit log trong **PostgreSQL/Amazon RDS**.
-- Lưu ảnh cổng và ảnh camera vị trí bằng **Amazon S3** thông qua presigned URL.
-- Sử dụng **Lambda + Rekognition** để nhận biết vị trí có xe hoặc không có xe.
-- Quản lý xác thực bằng **Amazon Cognito** và theo dõi log qua **CloudWatch**.
-- Khai báo hạ tầng bằng **AWS CDK**, sau đó triển khai bằng CloudFormation.
+- Cung cấp không gian User và Admin bằng **Next.js + Fluent UI**.
+- Cho phép người dùng chọn bãi xe, thời gian đến và vị trí còn trống.
+- Tạo mã QR cho booking và duy trì các trạng thái `PENDING`, `ACTIVE`, `CLOSED`, `CANCELLED`, `EXPIRED`.
+- Hỗ trợ Admin xử lý check-in/check-out bằng QR, ảnh tại cổng và biển số quan sát được.
+- Hiển thị vị trí theo trạng thái `AVAILABLE`, `RESERVED`, `OCCUPIED`.
+- Lưu user, booking, QR, phiên gửi xe, phí và audit event trong **PostgreSQL/Amazon RDS**.
+- Lưu ảnh cổng và ảnh camera vị trí trong **Amazon S3** bằng presigned URL.
+- Sử dụng **AWS Lambda + Amazon Rekognition** để xác định vị trí camera có xe hay không.
+- Quản lý quyền bằng **Amazon Cognito** và theo dõi hoạt động AWS qua **CloudWatch**.
+- Khai báo hạ tầng bằng **AWS CDK** và triển khai qua CloudFormation.
 
-## 4. Phạm vi đề tài
+## 4. Phạm vi
 
-Phạm vi hiện tại tập trung vào phiên bản workshop/demo. Người dùng có thể đăng nhập, xem sơ đồ bãi xe, chọn thời gian, đặt vị trí, nhận QR và xem lịch sử. Admin có thể theo dõi dashboard, vận hành cổng, xem xe đang gửi, xử lý trường hợp cần duyệt, kiểm tra audit log và báo cáo phí mô phỏng.
+Phạm vi dự án tập trung vào môi trường workshop và demo. Người dùng có thể đăng ký hoặc đăng nhập, xem sơ đồ bãi xe, chọn thời gian, đặt vị trí, nhận QR và xem lịch sử booking. Admin có thể theo dõi tình trạng vị trí, vận hành luồng cổng, xem trường hợp biển số không khớp, kiểm tra audit record và báo cáo phí mô phỏng.
 
-Rekognition chỉ được sử dụng để phát hiện trạng thái có xe tại vị trí camera theo dõi. Phiên bản hiện tại chưa tự động OCR biển số; Admin đọc ảnh tại cổng và nhập biển số, sau đó backend chuẩn hóa và đối chiếu dữ liệu lúc vào/ra. Hệ thống cũng chưa tích hợp cổng thanh toán thật.
+Phiên bản hiện tại chưa tự động OCR biển số và chưa tích hợp thanh toán thật. Admin đọc ảnh tại cổng rồi nhập biển số quan sát được; backend chuẩn hóa và đối chiếu giá trị vào/ra. API Gateway và CloudFront chưa nằm trong chế độ triển khai `services-only` hiện tại; có thể bổ sung khi frontend và API chuyển sang mô hình hosting AWS đầy đủ.
 
 ## 5. Kiến trúc đề xuất
 
-Người dùng hoặc Admin truy cập giao diện Next.js từ trình duyệt. Frontend gửi request đến FastAPI để xác thực quyền và xử lý nghiệp vụ. FastAPI đọc/ghi dữ liệu tại PostgreSQL hoặc Amazon RDS, đồng thời tạo presigned URL để tải ảnh lên S3. Khi cần kiểm tra vị trí đỗ, Lambda nhận sự kiện ảnh và sử dụng Rekognition để trả về kết quả có xe hoặc không có xe. Cognito quản lý tài khoản và nhóm quyền; CloudWatch thu thập log và metric của các dịch vụ AWS.
+User và Admin truy cập ứng dụng Next.js bằng trình duyệt. Frontend gọi FastAPI để xác thực quyền và xử lý nghiệp vụ. FastAPI tạo booking/QR, cập nhật trạng thái cổng và phiên gửi xe, tính phí mô phỏng, rồi ghi audit event vào PostgreSQL/Amazon RDS. S3 lưu ảnh cổng và ảnh vị trí bằng presigned URL. Lambda phát hiện trạng thái vị trí gọi Rekognition theo yêu cầu, Cognito quản lý hai group `USER`/`ADMIN`, còn CloudWatch nhận log dịch vụ.
 
-![Kiến trúc hệ thống Car Parking theo AWS](/images/5-Workshop/smart-parking-architecture-aws.png)
+![Kiến trúc triển khai Car Parking trên AWS](/images/5-Workshop/smart-parking-architecture-aws.svg)
 
-<p style="text-align:center;"><em>Kiến trúc tổng thể của hệ thống Car Parking</em></p>
+*Luồng triển khai Smart Parking bằng lớp ứng dụng local và các dịch vụ AWS được quản lý.*
 
-## 6. Thành phần và công nghệ
+## 6. Dịch vụ AWS sử dụng
 
-| Thành phần | Vai trò |
+| Dịch vụ | Vai trò trong dự án |
 |---|---|
-| **Next.js + Fluent UI** | Xây dựng giao diện và không gian làm việc riêng cho User/Admin. |
-| **FastAPI** | Cung cấp API, kiểm tra quyền và điều phối các quy trình nghiệp vụ. |
-| **PostgreSQL / Amazon RDS** | Lưu tài khoản, booking, QR, phiên gửi xe, phí và audit log. |
-| **Amazon S3** | Lưu ảnh phương tiện tại cổng và ảnh camera của vị trí đỗ. |
-| **Amazon Cognito** | Quản lý User Pool cùng hai nhóm quyền `USER` và `ADMIN`. |
-| **AWS Lambda + Rekognition** | Phân tích ảnh camera để xác định vị trí đang trống hay có xe. |
-| **CloudWatch** | Theo dõi log và metric của Lambda cùng RDS. |
-| **AWS CDK + CloudFormation** | Mô tả, kiểm tra và triển khai hạ tầng theo dạng Infrastructure as Code. |
+| **Amazon RDS PostgreSQL** | Lưu user, vị trí, booking, phiên gửi xe, phí và audit event. |
+| **Amazon S3** | Lưu ảnh biển số, cổng, QR, smoke-test và camera vị trí; chặn truy cập công khai. |
+| **Amazon Cognito** | Quản lý User Pool, App Client và hai group phân quyền `USER`/`ADMIN`. |
+| **AWS Lambda** | Xử lý ảnh vị trí và tự động hóa thời gian lưu log. |
+| **Amazon Rekognition** | Nhận diện label theo yêu cầu cho demo trạng thái vị trí. |
+| **Security Group và IAM** | Giới hạn database và runtime chỉ được dùng các port, tài nguyên, action cần thiết. |
+| **AWS CDK + CloudFormation** | Mô tả, xem xét và triển khai database/services stack dưới dạng mã hạ tầng. |
+| **Amazon CloudWatch** | Cung cấp log group Lambda/RDS để giám sát và xử lý sự cố. |
 
-## 7. Thiết kế chức năng
+## 7. Thiết kế thành phần
 
-### 7.1 Giao diện người dùng
+### 7.1 Frontend
 
-Sau khi đăng nhập, người dùng chọn bãi xe, thời điểm đến, thời lượng gửi và một vị trí còn trống trên sơ đồ. Khi booking được tạo, hệ thống cung cấp QR để sử dụng tại cổng và cho phép theo dõi phiên gửi xe.
+Frontend được xây dựng bằng Next.js và Fluent UI. Ứng dụng cung cấp không gian User/Admin, xử lý đăng nhập, hiển thị sơ đồ bãi xe và gọi FastAPI cho các thao tác đặt chỗ/vận hành. Trong workshop, frontend có thể chạy local hoặc trên VPS nhưng vẫn kết nối tới các tài nguyên AWS.
 
-<p class="workshop-img"><img src="/images/5-Workshop/01-login.png" alt="Màn hình đăng nhập Car Parking" /></p>
-<p style="text-align:center;"><em>Giao diện đăng nhập của hệ thống Car Parking</em></p>
+<p class="workshop-img"><img src="/images/5-Workshop/01-login.png" alt="Màn hình đăng nhập Smart Parking" /></p>
 
-<p class="workshop-img"><img src="/images/5-Workshop/02-user-booking.png" alt="Người dùng chọn vị trí và tạo booking" /></p>
-<p style="text-align:center;"><em>Màn hình đặt chỗ và chọn vị trí đỗ xe</em></p>
+*Giao diện xác thực của Smart Parking.*
 
-### 7.2 Giao diện quản trị
+<p class="workshop-img"><img src="/images/5-Workshop/02-user-booking.png" alt="Người dùng chọn vị trí đỗ xe" /></p>
 
-Admin sử dụng dashboard để theo dõi số vị trí còn trống, xe đang gửi, trường hợp biển số cần duyệt, vi phạm vị trí và doanh thu mô phỏng. Các màn hình vận hành hỗ trợ quét QR, xử lý cổng, kiểm tra sơ đồ bãi xe và xem báo cáo.
+*Luồng User chọn vị trí và tạo booking.*
 
-<p class="workshop-img"><img src="/images/5-Workshop/04-admin-overview.png" alt="Dashboard tổng quan dành cho Admin" /></p>
-<p style="text-align:center;"><em>Dashboard vận hành bãi xe theo thời gian thực</em></p>
+### 7.2 Backend
 
-<p class="workshop-img"><img src="/images/5-Workshop/05-admin-gate-control.png" alt="Màn hình điều khiển cổng Car Parking" /></p>
-<p style="text-align:center;"><em>Chức năng xử lý check-in và check-out tại cổng</em></p>
+Backend được triển khai bằng FastAPI. Backend kiểm tra quyền, tạo booking và QR, xử lý check-in/check-out tại cổng, ghi audit event và trả dữ liệu cho không gian User/Admin. Backend đọc secret database từ môi trường triển khai thay vì lưu password trong source code.
 
-<p class="workshop-img"><img src="/images/5-Workshop/06-admin-parking-map.png" alt="Sơ đồ vị trí đỗ xe dành cho Admin" /></p>
-<p style="text-align:center;"><em>Sơ đồ giúp Admin quan sát trạng thái từng vị trí</em></p>
+<p class="workshop-img"><img src="/images/5-Workshop/04-admin-overview.png" alt="Dashboard quản trị Smart Parking" /></p>
 
-<p class="workshop-img"><img src="/images/5-Workshop/07-admin-revenue.png" alt="Báo cáo doanh thu mô phỏng" /></p>
-<p style="text-align:center;"><em>Màn hình tổng hợp phí và doanh thu mô phỏng</em></p>
+*Dashboard Admin theo dõi hoạt động bãi xe.*
 
-### 7.3 Backend và dữ liệu
+### 7.3 Database
 
-FastAPI kiểm soát quyền, tạo booking, phát hành QR, mở hoặc đóng phiên gửi xe và ghi audit log. Mỗi thao tác tại cổng sử dụng một `event_id` duy nhất để hạn chế xử lý trùng. PostgreSQL lưu trạng thái nghiệp vụ và tính phí mô phỏng dựa trên thời gian gửi xe.
+Database sử dụng PostgreSQL trên Amazon RDS. Cơ sở dữ liệu lưu tài khoản, vị trí, booking, phiên gửi xe, gate event, phí và kết quả AI. Database stack đồng thời tạo Security Group giới hạn và secret do RDS quản lý. Ứng dụng kết nối qua endpoint/port đã cấu hình, còn credential được giữ trong Secrets Manager.
 
-![Vòng đời booking và phiên gửi xe](/images/5-Workshop/smart-parking-flow.svg)
+<p class="workshop-img"><img src="/images/5-Workshop/aws-04-rds-database.png" alt="Cơ sở dữ liệu PostgreSQL Smart Parking trên Amazon RDS" /></p>
 
-### 7.4 Dịch vụ AWS
+*Cơ sở dữ liệu PostgreSQL của Smart Parking ở trạng thái Available.*
 
-Hạ tầng workshop sử dụng một stack database cho RDS PostgreSQL, Security Group và Secrets Manager; stack dịch vụ còn lại chứa S3, Cognito, Lambda AI, IAM policy và CloudWatch Logs. Frontend cùng FastAPI hiện có thể chạy local hoặc trên VPS trong khi vẫn kết nối các dịch vụ AWS này.
+### 7.4 Payment
 
-![Mô hình triển khai dịch vụ AWS](/images/5-Workshop/smart-parking-deployment-aws.png)
+Dự án hiện chưa kết nối cổng thanh toán thật. Backend tính phí mô phỏng dựa trên thời lượng gửi xe và hiển thị kết quả trong màn hình doanh thu Admin. Cách làm này giữ workshop tập trung vào booking, cổng, dữ liệu và tích hợp AWS, đồng thời để thanh toán điện tử ở phần phát triển sau.
+
+<p class="workshop-img"><img src="/images/5-Workshop/07-admin-revenue.png" alt="Báo cáo phí mô phỏng Smart Parking" /></p>
+
+*Tổng hợp phí gửi xe và doanh thu mô phỏng.*
 
 ## 8. Kế hoạch triển khai
 
-| Giai đoạn | Nội dung |
+| Giai đoạn | Nội dung chính |
 |---|---|
-| Giai đoạn 1 | Rà soát mã nguồn frontend, backend, database migration và dữ liệu demo. |
-| Giai đoạn 2 | Chuẩn bị AWS CLI, CDK, IAM profile và biến môi trường triển khai. |
-| Giai đoạn 3 | Triển khai RDS PostgreSQL, Security Group và Secrets Manager. |
-| Giai đoạn 4 | Tạo S3, Cognito, Lambda AI, IAM policy và CloudWatch Logs. |
-| Giai đoạn 5 | Chạy migration, nạp dữ liệu demo và kết nối FastAPI với RDS. |
-| Giai đoạn 6 | Khởi động frontend, kiểm tra luồng User/Admin, booking, QR và vận hành cổng. |
-| Giai đoạn 7 | Kiểm thử camera vị trí, audit log, báo cáo phí và dọn dẹp tài nguyên không cần thiết. |
+| Giai đoạn 1 | Rà soát frontend, FastAPI, database migration, dữ liệu demo và biến môi trường. |
+| Giai đoạn 2 | Chuẩn bị AWS CLI, dependency CDK, IAM profile được duyệt và Region triển khai. |
+| Giai đoạn 3 | Triển khai Amazon RDS PostgreSQL, Security Group và secret do RDS quản lý. |
+| Giai đoạn 4 | Triển khai S3, Cognito, Lambda AI, IAM policy và CloudWatch log group. |
+| Giai đoạn 5 | Chạy migration, nạp dữ liệu demo, tạo object S3 kiểm thử và kết nối FastAPI với RDS. |
+| Giai đoạn 6 | Khởi động frontend, kiểm tra đăng nhập User/Admin, booking, QR, cổng và sơ đồ vị trí. |
+| Giai đoạn 7 | Kiểm thử AI, audit log, báo cáo phí, bằng chứng giám sát, chi phí và dọn dẹp. |
 
 ## 9. Kết quả kỳ vọng
 
-- Người dùng đăng nhập, chọn thời gian và đặt được vị trí còn trống.
-- Hệ thống phát hành QR và quản lý đúng vòng đời booking.
-- Admin theo dõi dashboard, xử lý xe vào/ra và kiểm tra biển số.
-- Sơ đồ bãi xe phản ánh các trạng thái trống, đã đặt và đang có xe.
-- Hình ảnh được lưu trong S3 và dữ liệu nghiệp vụ được ghi vào PostgreSQL/RDS.
-- Lambda và Rekognition hỗ trợ phát hiện trạng thái vị trí qua ảnh camera.
-- Audit log, lịch sử gửi xe và phí mô phỏng có thể được tra cứu.
-- Hạ tầng được triển khai lặp lại bằng CDK và CloudFormation.
+Sau khi hoàn thành, hệ thống Smart Parking dự kiến đạt được:
+
+- User đăng nhập, chọn thời gian và đặt được vị trí còn trống.
+- Ứng dụng phát hành QR và quản lý đúng vòng đời booking.
+- Admin theo dõi dashboard, xử lý sự kiện cổng và kiểm tra biển số không khớp.
+- Sơ đồ bãi xe phản ánh trạng thái trống, đã đặt và đang có xe.
+- Ảnh bằng chứng được lưu trên S3, dữ liệu nghiệp vụ được lưu trong PostgreSQL/RDS.
+- Lambda và Rekognition cung cấp demo phát hiện trạng thái vị trí.
+- Cognito group, IAM policy, CloudWatch log và CloudFormation stack có thể kiểm tra trên AWS Console.
+- Người thực hiện có thể lặp lại quy trình deploy và giải thích các nhóm chi phí AWS chính.
 
 ## 10. Rủi ro và hướng xử lý
 
 | Rủi ro | Hướng xử lý |
 |---|---|
-| Frontend không gọi được FastAPI | Kiểm tra URL API, CORS, trạng thái backend và cấu hình mạng. |
-| Backend không kết nối được PostgreSQL/RDS | Kiểm tra connection string, secret, Security Group và migration. |
-| QR bị xử lý nhiều lần | Sử dụng `event_id`, kiểm tra trạng thái booking và cơ chế idempotency. |
-| Ảnh không tải được lên S3 | Kiểm tra bucket, presigned URL, IAM policy và thời hạn URL. |
-| Rekognition trả kết quả không chính xác | Cải thiện góc camera, chất lượng ảnh và ngưỡng confidence. |
-| Chi phí AWS phát sinh ngoài dự kiến | Theo dõi Billing/Budgets và dọn dẹp tài nguyên sau khi thực hành. |
+| Frontend không gọi được FastAPI | Kiểm tra API URL, CORS, backend health và cấu hình mạng. |
+| Backend không kết nối được RDS | Kiểm tra endpoint, port, secret, migration và Security Group. |
+| Không upload được ảnh lên S3 | Kiểm tra bucket, presigned URL, IAM policy, object key và thời hạn URL. |
+| QR hoặc gate event bị xử lý lặp | Kiểm tra booking state và dùng `event_id` duy nhất với xử lý idempotent. |
+| AI phân loại vị trí chưa chính xác | Cải thiện góc camera, chất lượng ảnh và điều chỉnh confidence threshold. |
+| Chi phí AWS vượt dự kiến | Theo dõi Billing/Budgets và dừng/xóa tài nguyên workshop sau kiểm thử. |
 
 ## 11. Hướng phát triển
 
-Trong tương lai, frontend và FastAPI có thể được triển khai hoàn toàn lên AWS thay vì chạy local/VPS. Hệ thống cũng có thể bổ sung OCR biển số, thông báo theo thời gian thực, thanh toán điện tử, nhiều bãi xe, chính sách tính phí linh hoạt và pipeline CI/CD tự động.
+Các phiên bản sau có thể triển khai frontend và FastAPI hoàn toàn trên AWS, bổ sung CloudFront, Route 53 và pipeline CI/CD. Hệ thống cũng có thể phát triển OCR biển số tự động, thông báo thời gian thực, thanh toán điện tử, nhiều bãi xe, chính sách giá linh hoạt, phân tích occupancy nâng cao, Application Load Balancer và Auto Scaling.

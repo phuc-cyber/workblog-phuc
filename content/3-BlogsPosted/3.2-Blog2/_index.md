@@ -64,7 +64,6 @@ An effective deployment still requires the team to select the appropriate servic
 
 <p class="workshop-img"><img src="/images/3-BlogsTranslated/aws-vn-post-sagemaker-ai.png" alt="Amazon SageMaker and AWS AI Services post shared with AWS Study Group VN"></p>
 
-## Reference
+## Shared post link
 
-[Amazon SageMaker – AWS News Blog](https://aws.amazon.com/blogs/aws/sagemaker/)
-
+[Facebook post](https://www.facebook.com/share/p/1832xtMBw8/)

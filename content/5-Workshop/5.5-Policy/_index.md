@@ -15,9 +15,15 @@ A successful demonstration must prove the full path from the UI to AWS instead o
 Open the image bucket and inspect **Objects**:
 
 - `plates/`: entry and exit gate images.
-- `slot-observations/`: parking-slot camera images.
+- `qrcodes/`: QR images generated for bookings.
+- `smoke-tests/`: objects used to verify the deployment path.
+- `slot-observations/`: parking-slot camera images, created after running the AI demonstration.
 
 Keep **Block public access** enabled. The application uploads and reads images through time-limited presigned URLs.
+
+![Smart Parking S3 object folders](/images/5-Workshop/aws-03-s3-objects.png)
+
+*Figure 5.5-1: The deployed bucket contains the current plate, QR-code, and smoke-test evidence folders.*
 
 ## 2. Amazon RDS PostgreSQL
 
@@ -47,6 +53,10 @@ FROM slot_observations ORDER BY id DESC LIMIT 20;
 
 Compare each RDS `image_key` with the corresponding S3 object key.
 
+![Smart Parking PostgreSQL database in RDS](/images/5-Workshop/aws-04-rds-database.png)
+
+*Figure 5.5-2: Amazon RDS reports the Smart Parking PostgreSQL instance as available.*
+
 ## 3. Lambda, Rekognition, and CloudWatch
 
 1. Submit a slot-camera image in AI mode.
@@ -57,15 +67,27 @@ Compare each RDS `image_key` with the corresponding S3 object key.
 
 Rekognition `DetectLabels` is an on-demand request, so the Rekognition Console does not provide a separate image history.
 
+![Smart Parking Lambda functions](/images/5-Workshop/aws-05-lambda-functions.png)
+
+*Figure 5.5-3: Lambda functions deployed for AI occupancy processing and CloudWatch log retention.*
+
+![CloudWatch log groups for Smart Parking](/images/5-Workshop/aws-07-cloudwatch-log-groups.png)
+
+*Figure 5.5-4: CloudWatch receives logs from the AI Lambda, log-retention function, and RDS PostgreSQL.*
+
 ## 4. Cognito
 
 Inspect the User Pool, App Client, and `USER`/`ADMIN` groups. If Cognito authentication is enabled in the backend, a newly registered account should appear in Users and its assigned group. In local-auth mode, the account appears only in RDS; clearly state this configuration difference in the report.
+
+![Cognito USER and ADMIN groups](/images/5-Workshop/aws-06-cognito-groups.png)
+
+*Figure 5.5-5: The Cognito User Pool contains the `USER` and `ADMIN` authorization groups.*
 
 ## 5. Evidence checklist
 
 - [ ] Both CloudFormation stacks deployed successfully.
 - [ ] RDS is `Available` and contains records from the demo.
-- [ ] S3 contains both `plates/` and `slot-observations/` images.
+- [ ] S3 contains the expected evidence folders, including `plates/`, `qrcodes/`, and `slot-observations/` after the AI demonstration.
 - [ ] Booking moved `PENDING → ACTIVE → CLOSED`.
 - [ ] Slot moved `AVAILABLE → RESERVED → OCCUPIED → AVAILABLE`.
 - [ ] Lambda received a new invocation and CloudWatch contains its log.

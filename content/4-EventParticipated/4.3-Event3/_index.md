@@ -41,4 +41,4 @@ The event strengthened my understanding of cloud-architecture thinking, web appl
 
 ### Participation image
 
-<p class="workshop-img"><img src="/images/4-EventParticipated/event-photo.png" alt="Event participation photo"></p>
+<p class="workshop-img"><img src="/images/4-EventParticipated/event3-photo.png" alt="Event participation photo"></p>

@@ -64,7 +64,6 @@ Dù vậy, để triển khai hiệu quả vẫn cần lựa chọn đúng dịc
 
 <p class="workshop-img"><img src="/images/3-BlogsTranslated/aws-vn-post-sagemaker-ai.png" alt="Bài đăng về Amazon SageMaker và AWS AI Services trên AWS Study Group VN"></p>
 
-## Tài liệu tham khảo
+## Link bài đăng đã chia sẻ
 
-[Amazon SageMaker – AWS News Blog](https://aws.amazon.com/blogs/aws/sagemaker/)
-
+[Bài đăng Facebook](https://www.facebook.com/share/p/1832xtMBw8/)

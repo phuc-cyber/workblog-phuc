@@ -15,9 +15,15 @@ Một demo thành công cần chứng minh được luồng từ giao diện đ�
 Mở bucket ảnh → **Objects**:
 
 - `plates/`: ảnh tại cổng vào và cổng ra.
-- `slot-observations/`: ảnh camera vị trí đỗ.
+- `qrcodes/`: ảnh QR được tạo cho các lượt đặt chỗ.
+- `smoke-tests/`: object dùng để kiểm tra nhanh luồng triển khai.
+- `slot-observations/`: ảnh camera vị trí đỗ, được tạo sau khi chạy demo AI.
 
 Bucket phải tiếp tục bật **Block public access**. Ứng dụng upload/xem ảnh bằng presigned URL có thời hạn.
+
+![Các thư mục object trong S3 của Smart Parking](/images/5-Workshop/aws-03-s3-objects.png)
+
+*Hình 5.5-1: Bucket đã triển khai hiện có các thư mục bằng chứng cho biển số, mã QR và smoke test.*
 
 ## 2. Amazon RDS PostgreSQL
 
@@ -47,6 +53,10 @@ FROM slot_observations ORDER BY id DESC LIMIT 20;
 
 Đối chiếu `image_key` trong RDS với object key tương ứng trong S3.
 
+![Cơ sở dữ liệu PostgreSQL của Smart Parking trên RDS](/images/5-Workshop/aws-04-rds-database.png)
+
+*Hình 5.5-2: Amazon RDS báo cơ sở dữ liệu PostgreSQL của Smart Parking đang ở trạng thái khả dụng.*
+
 ## 3. Lambda, Rekognition và CloudWatch
 
 1. Gửi một ảnh camera vị trí ở chế độ AI.
@@ -57,15 +67,27 @@ FROM slot_observations ORDER BY id DESC LIMIT 20;
 
 Rekognition `DetectLabels` là lời gọi on-demand, vì vậy không có danh sách lịch sử ảnh riêng trên Rekognition Console.
 
+![Các Lambda function của Smart Parking](/images/5-Workshop/aws-05-lambda-functions.png)
+
+*Hình 5.5-3: Các Lambda function phục vụ xử lý AI và quản lý thời gian lưu CloudWatch log.*
+
+![Các CloudWatch log group của Smart Parking](/images/5-Workshop/aws-07-cloudwatch-log-groups.png)
+
+*Hình 5.5-4: CloudWatch nhận log từ Lambda xử lý AI, Lambda quản lý log và RDS PostgreSQL.*
+
 ## 4. Cognito
 
 Kiểm tra User Pool, App Client và hai group `USER`/`ADMIN`. Nếu backend bật Cognito authentication, tài khoản đăng ký mới phải xuất hiện trong Users và group tương ứng. Nếu ứng dụng đang dùng local-auth, tài khoản chỉ xuất hiện trong RDS; đây là khác biệt cấu hình cần ghi rõ khi báo cáo.
+
+![Hai group USER và ADMIN trong Cognito](/images/5-Workshop/aws-06-cognito-groups.png)
+
+*Hình 5.5-5: Cognito User Pool có hai nhóm phân quyền `USER` và `ADMIN`.*
 
 ## 5. Checklist bằng chứng
 
 - [ ] Hai CloudFormation stack triển khai thành công.
 - [ ] RDS có trạng thái `Available` và có record của luồng demo.
-- [ ] S3 có cả ảnh `plates/` và `slot-observations/`.
+- [ ] S3 có các thư mục bằng chứng mong đợi, gồm `plates/`, `qrcodes/` và `slot-observations/` sau khi chạy demo AI.
 - [ ] Booking chuyển `PENDING → ACTIVE → CLOSED`.
 - [ ] Slot chuyển `AVAILABLE → RESERVED → OCCUPIED → AVAILABLE`.
 - [ ] Lambda có invocation mới và CloudWatch có log.

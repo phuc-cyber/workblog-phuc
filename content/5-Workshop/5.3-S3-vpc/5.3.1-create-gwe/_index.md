@@ -52,6 +52,10 @@ npm run deploy -- -c deploymentMode=services-only --profile car-parking-deployer
 
 CDK creates the database secret in Secrets Manager. Reference that secret from the backend environment; never copy the password into source code.
 
+![Successful Smart Parking CloudFormation stacks](/images/5-Workshop/aws-01-cloudformation-stacks.png)
+
+*Figure 5.3.1-1: CloudFormation confirms that the database and services stacks were deployed successfully in the Singapore Region.*
+
 {{% notice warning %}}
 Always review `cdk diff` before deployment. The workshop RDS instance enables encryption, short backup retention, deletion protection, and a `RETAIN` policy, so it will not automatically disappear after `cdk destroy`.
 {{% /notice %}}

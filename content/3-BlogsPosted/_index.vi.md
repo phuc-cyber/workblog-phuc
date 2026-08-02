@@ -1,12 +1,12 @@
 ﻿---
-title: "Các blog đã biên dịch và chia sẻ"
+title: "Các blog đã biên dịch"
 date: 2026-07-01
 weight: 3
 chapter: false
 pre: " <b> 3. </b> "
 ---
 
-# Các blog đã biên dịch và chia sẻ
+# Các blog đã biên dịch
 
 Phần này ghi lại ba bài viết về AWS mà mình đã tìm hiểu, biên dịch, tóm lược và chia sẻ trong thời gian thực tập. Các chủ đề tập trung vào tự động hóa tác vụ theo lịch, tích hợp AI/ML vào ứng dụng và xây dựng chiến lược Disaster Recovery trên AWS.
 
@@ -20,19 +20,3 @@ Bài viết giới thiệu hai nhóm công cụ AI/ML trên AWS, quy trình chu�
 
 ### [Blog 3 - Xây dựng chiến lược Disaster Recovery và mạng phân tán trên AWS](3.3-Blog3/)
 Bài viết trình bày vai trò của RTO/RPO, cơ chế block-level replication của AWS Elastic Disaster Recovery, mô hình kết nối tập trung bằng AWS Transit Gateway và các bước kiểm thử một kịch bản DR.
-
-## Minh chứng bài đăng trên AWS Study Group VN
-
-Các hình dưới đây ghi lại một số nội dung mình đã đăng trong cộng đồng AWS Study Group VN khi học AWS và triển khai dự án.
-
-<p class="workshop-img"><img src="/images/3-BlogsTranslated/aws-vn-post-reliability-dr.png" alt="Bài đăng về AWS Reliability và Disaster Recovery"></p>
-
-*Nội dung trao đổi về độ tin cậy trên AWS, chiến lược Disaster Recovery và dịch vụ AWS Elastic Disaster Recovery.*
-
-<p class="workshop-img"><img src="/images/3-BlogsTranslated/aws-vn-post-sagemaker-ai.png" alt="Bài đăng về Amazon SageMaker và AWS AI Services"></p>
-
-*Nội dung giới thiệu hướng đưa AI/ML vào ứng dụng bằng Amazon SageMaker cùng các dịch vụ AI trên AWS.*
-
-<p class="workshop-img"><img src="/images/3-BlogsTranslated/aws-vn-post-eventbridge-scheduler.png" alt="Bài đăng về Amazon EventBridge Scheduler"></p>
-
-*Nội dung minh họa việc dùng Amazon EventBridge Scheduler để tự động chạy những công việc theo lịch định sẵn.*

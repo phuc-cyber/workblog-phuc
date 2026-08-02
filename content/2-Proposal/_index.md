@@ -6,134 +6,136 @@ chapter: false
 pre: " <b> 2. </b> "
 ---
 
-# Proposal for Building Car Parking on AWS
+# Proposal
 
-## 1. Project name
+# Proposal for Deploying the Smart Parking Project on AWS
 
-**Building a Smart Car Parking Management Platform with AWS Services**
+## 1. Project Title
 
-The project proposes a web platform that lets drivers reserve parking spaces and enables administrators to monitor parking operations. It combines a Next.js interface, FastAPI services, PostgreSQL, booking-scoped QR codes, and AWS services for authentication, image storage, monitoring, and parking-slot analysis.
+**Deploying the Smart Parking Management Platform with AWS Services**
 
-## 2. Motivation
+This project focuses on deploying a web-based parking platform that supports reservations, QR-based gate operations, parking-session tracking, and administrator monitoring. The system includes a Next.js and Fluent UI frontend, FastAPI business APIs, PostgreSQL data, S3 image evidence, Cognito groups, and an AI-assisted parking-slot workflow.
 
-Paper tickets and manual parking procedures make it difficult to identify available spaces, verify entry and exit events, or review operational history. Drivers also have no convenient way to select a space and arrival time before reaching the facility.
+## 2. Background and Motivation
 
-Car Parking addresses these limitations through role-based **User** and **Admin** applications. It also provides a practical environment for integrating **Amazon RDS**, **Amazon S3**, **Amazon Cognito**, **AWS Lambda**, **Amazon Rekognition**, **CloudWatch**, **AWS CDK**, and **CloudFormation**.
+In a real-world parking system, the application should not only show a list of spaces but also keep booking state, verify entry and exit events, store image evidence, and provide an auditable operating history. Manual tickets and disconnected records make it difficult to know which slots are available, review a vehicle event, or trace an exception.
 
-## 3. Project objectives
+Deploying Smart Parking with AWS demonstrates how **Amazon RDS**, **Amazon S3**, **Amazon Cognito**, **AWS Lambda**, **Amazon Rekognition**, **IAM**, **AWS CDK**, **CloudFormation**, and **CloudWatch** can work together in a practical application. The frontend and FastAPI service can run locally or on a VPS while using the managed AWS resources.
 
-- Build separate User and Admin workspaces with **Next.js + Fluent UI**.
-- Allow drivers to select a parking facility, arrival time, and available space.
-- Create bookings and QR codes with `PENDING`, `ACTIVE`, `CLOSED`, `CANCELLED`, or `EXPIRED` states.
-- Let Admins process check-in/check-out with QR codes, vehicle images, and manually observed plates.
-- Display spaces as `AVAILABLE`, `RESERVED`, or `OCCUPIED`.
-- Store users, bookings, QR codes, parking sessions, fees, and audit logs in **PostgreSQL/Amazon RDS**.
-- Upload gate and parking-camera images to **Amazon S3** through presigned URLs.
-- Use **Lambda + Rekognition** to determine whether a monitored space contains a vehicle.
-- Manage authentication with **Amazon Cognito** and collect logs in **CloudWatch**.
-- Define the infrastructure in **AWS CDK** and deploy it through CloudFormation.
+## 3. Objectives
 
-## 4. Project scope
+- Provide separate User and Admin workspaces with **Next.js + Fluent UI**.
+- Allow a driver to choose a parking facility, arrival period, and available slot.
+- Create booking QR codes and maintain `PENDING`, `ACTIVE`, `CLOSED`, `CANCELLED`, and `EXPIRED` states.
+- Let Admins process QR-based check-in/check-out and record gate images and observed plates.
+- Display parking spaces as `AVAILABLE`, `RESERVED`, or `OCCUPIED`.
+- Store users, bookings, QR codes, sessions, fees, and audit events in **PostgreSQL/Amazon RDS**.
+- Store gate and parking-camera images in **Amazon S3** through presigned URLs.
+- Use **AWS Lambda + Amazon Rekognition** to determine whether a monitored slot contains a vehicle.
+- Manage role-based access through **Amazon Cognito** and monitor AWS activity with **CloudWatch**.
+- Define the infrastructure with **AWS CDK** and deploy it through CloudFormation.
 
-The current scope is a workshop and demonstration environment. Drivers can sign in, inspect the parking map, choose a period, reserve a space, receive a QR code, and review history. Administrators can monitor the dashboard, operate the gate, inspect current vehicles, review exceptions, read audit logs, and view simulated fee reports.
+## 4. Scope
 
-Rekognition is limited to detecting whether a monitored space contains a vehicle. The present version does not perform automatic license-plate OCR. An Admin reads the gate image and enters the plate, after which the backend normalizes and compares entry and exit values. Real payment processing is also outside the current scope.
+The project scope focuses on a workshop and demonstration deployment. Users can register or sign in, inspect the parking map, select a period, reserve a slot, receive a QR code, and review booking history. Admins can monitor occupancy, operate the gate workflow, review plate mismatches, inspect audit records, and view simulated fee summaries.
 
-## 5. Proposed architecture
+The current version does not perform automatic license-plate OCR or real payment processing. An Admin reads the gate image and enters the observed plate; the backend normalizes and compares entry and exit values. API Gateway and CloudFront are not included in the current `services-only` deployment mode. They can be added later if the frontend and API are moved to a fully managed AWS hosting model.
 
-Users and Admins access the Next.js application in a browser. The frontend calls FastAPI for authorization and business workflows. FastAPI reads and writes PostgreSQL or Amazon RDS data and creates presigned URLs for S3 image uploads. For parking-space monitoring, Lambda processes image events and invokes Rekognition to classify the space as occupied or empty. Cognito manages accounts and groups, while CloudWatch records AWS logs and metrics.
+## 5. Proposed Architecture
 
-![Car Parking system architecture on AWS](/images/5-Workshop/smart-parking-architecture-aws.png)
+Users and Admins access the Next.js application through a browser. The frontend calls FastAPI for authorization and business workflows. FastAPI creates bookings and QR codes, updates gate and parking-session states, calculates simulated fees, and writes audit events to PostgreSQL/Amazon RDS. S3 stores gate and slot images through presigned URLs. The slot-occupancy Lambda invokes Rekognition on demand, while Cognito manages the `USER` and `ADMIN` groups and CloudWatch receives service logs.
 
-<p style="text-align:center;"><em>Overall architecture of the Car Parking platform</em></p>
+![Car Parking deployment architecture on AWS](/images/5-Workshop/smart-parking-architecture-aws.svg)
 
-## 6. Components and technologies
+*Smart Parking deployment workflow using local application services and managed AWS resources.*
 
-| Component | Responsibility |
+## 6. AWS Services Used
+
+| Service | Role in the project |
 |---|---|
-| **Next.js + Fluent UI** | Provides separate interfaces and workspaces for Users and Admins. |
-| **FastAPI** | Exposes APIs, enforces authorization, and coordinates business workflows. |
-| **PostgreSQL / Amazon RDS** | Stores accounts, bookings, QR codes, sessions, fees, and audit logs. |
-| **Amazon S3** | Retains vehicle-gate images and monitored parking-space images. |
-| **Amazon Cognito** | Manages a User Pool with `USER` and `ADMIN` groups. |
-| **AWS Lambda + Rekognition** | Analyzes camera images to determine whether a space is occupied. |
-| **CloudWatch** | Collects logs and metrics for Lambda and RDS. |
-| **AWS CDK + CloudFormation** | Defines, reviews, and deploys infrastructure as code. |
+| **Amazon RDS PostgreSQL** | Stores users, parking slots, bookings, sessions, fees, and audit events. |
+| **Amazon S3** | Stores plate, gate, QR, smoke-test, and parking-camera evidence with public access blocked. |
+| **Amazon Cognito** | Manages the User Pool, App Client, and `USER`/`ADMIN` authorization groups. |
+| **AWS Lambda** | Processes slot-camera images and runs supporting log-retention automation. |
+| **Amazon Rekognition** | Performs on-demand label detection for the slot-occupancy demonstration. |
+| **Security Group and IAM** | Restrict database and runtime access to the approved ports, resources, and actions. |
+| **AWS CDK + CloudFormation** | Defines, reviews, and deploys the database and services stacks as infrastructure as code. |
+| **Amazon CloudWatch** | Provides Lambda and RDS log groups for monitoring and troubleshooting. |
 
-## 7. Functional design
+## 7. Component Design
 
-### 7.1 User interface
+### 7.1 Frontend
 
-After signing in, a driver chooses a parking facility, arrival time, parking duration, and an available space on the map. Once the booking is created, the application provides a QR code for gate use and displays the active parking session.
+The frontend is built with Next.js and Fluent UI. It provides separate User and Admin workspaces, handles sign-in, presents the parking map, and calls FastAPI for reservations and operational actions. The current workshop can run the frontend locally or from a VPS while connecting to the AWS resources.
 
-<p class="workshop-img"><img src="/images/5-Workshop/01-login.png" alt="Car Parking sign-in page" /></p>
-<p style="text-align:center;"><em>Car Parking authentication interface</em></p>
+<p class="workshop-img"><img src="/images/5-Workshop/01-login.png" alt="Smart Parking sign-in page" /></p>
 
-<p class="workshop-img"><img src="/images/5-Workshop/02-user-booking.png" alt="Driver choosing a parking space and creating a booking" /></p>
-<p style="text-align:center;"><em>Reservation interface for selecting a parking space</em></p>
+*Smart Parking authentication interface.*
 
-### 7.2 Administrator interface
+<p class="workshop-img"><img src="/images/5-Workshop/02-user-booking.png" alt="User selecting a parking slot" /></p>
 
-The Admin dashboard summarizes available spaces, vehicles currently parked, plates requiring review, location violations, and simulated revenue. Operational pages support QR processing, gate actions, parking-map inspection, and reporting.
+*User workflow for selecting a slot and creating a reservation.*
 
-<p class="workshop-img"><img src="/images/5-Workshop/04-admin-overview.png" alt="Administrator overview dashboard" /></p>
-<p style="text-align:center;"><em>Real-time parking operations dashboard</em></p>
+### 7.2 Backend
 
-<p class="workshop-img"><img src="/images/5-Workshop/05-admin-gate-control.png" alt="Car Parking gate-control screen" /></p>
-<p style="text-align:center;"><em>Gate workflow for check-in and check-out</em></p>
+The backend is implemented with FastAPI. It validates permissions, creates bookings and QR codes, processes gate check-in/check-out, records audit events, and returns the data required by the User and Admin workspaces. The backend reads the database secret from the deployment environment instead of storing a password in source code.
 
-<p class="workshop-img"><img src="/images/5-Workshop/06-admin-parking-map.png" alt="Administrator parking-space map" /></p>
-<p style="text-align:center;"><em>Map for monitoring the status of individual spaces</em></p>
+<p class="workshop-img"><img src="/images/5-Workshop/04-admin-overview.png" alt="Smart Parking administrator dashboard" /></p>
 
-<p class="workshop-img"><img src="/images/5-Workshop/07-admin-revenue.png" alt="Simulated revenue report" /></p>
-<p style="text-align:center;"><em>Simulated fees and revenue summary</em></p>
+*Administrator dashboard for monitoring parking operations.*
 
-### 7.3 Backend and data
+### 7.3 Database
 
-FastAPI enforces access rules, creates bookings, issues QR codes, opens and closes parking sessions, and records audit events. Every gate operation carries a unique `event_id` to reduce duplicate processing. PostgreSQL stores workflow state and supports simulated fee calculations based on parking duration.
+The database uses PostgreSQL on Amazon RDS. It stores account references, parking slots, bookings, parking sessions, gate events, fees, and AI observations. The database stack also provisions a restricted Security Group and an RDS-managed secret. The application connects through the configured endpoint and port, while credentials remain in Secrets Manager.
 
-![Booking and parking-session lifecycle](/images/5-Workshop/smart-parking-flow.svg)
+<p class="workshop-img"><img src="/images/5-Workshop/aws-04-rds-database.png" alt="Smart Parking PostgreSQL database in Amazon RDS" /></p>
 
-### 7.4 AWS services
+*Smart Parking PostgreSQL database in Available state.*
 
-The workshop infrastructure uses one database stack for RDS PostgreSQL, its Security Group, and Secrets Manager. A second services stack provisions S3, Cognito, the AI Lambda, runtime IAM policy, and CloudWatch Logs. The frontend and FastAPI can currently run locally or on a VPS while using these AWS resources.
+### 7.4 Payment
 
-![AWS services deployment model](/images/5-Workshop/smart-parking-deployment-aws.png)
+The current project does not connect to a real payment gateway. Instead, the backend calculates a simulated fee from parking duration and exposes the result to the Admin revenue view. This keeps the workshop focused on booking, gate, data, and AWS-service integration while leaving electronic payment as a future extension.
 
-## 8. Implementation plan
+<p class="workshop-img"><img src="/images/5-Workshop/07-admin-revenue.png" alt="Smart Parking simulated fee report" /></p>
 
-| Phase | Main work |
+*Simulated parking fee and revenue summary.*
+
+## 8. Implementation Plan
+
+| Phase | Main tasks |
 |---|---|
-| Phase 1 | Review frontend, backend, database migrations, and demo data. |
-| Phase 2 | Prepare AWS CLI, CDK, an IAM profile, and deployment environment variables. |
-| Phase 3 | Deploy RDS PostgreSQL, its Security Group, and Secrets Manager. |
-| Phase 4 | Provision S3, Cognito, the AI Lambda, IAM policy, and CloudWatch Logs. |
-| Phase 5 | Run migrations, load demonstration data, and connect FastAPI to RDS. |
-| Phase 6 | Start the frontend and validate User/Admin, booking, QR, and gate workflows. |
-| Phase 7 | Test parking-camera analysis, audit logs, fee reports, and resource cleanup. |
+| Phase 1 | Review the frontend, FastAPI source, database migrations, demo data, and environment variables. |
+| Phase 2 | Prepare AWS CLI, CDK dependencies, the approved IAM profile, and the deployment Region. |
+| Phase 3 | Deploy Amazon RDS PostgreSQL, its Security Group, and the RDS-managed secret. |
+| Phase 4 | Deploy S3, Cognito, the AI Lambda, IAM policy, and CloudWatch log groups. |
+| Phase 5 | Run migrations, load demonstration data, upload S3 test objects, and connect FastAPI to RDS. |
+| Phase 6 | Start the frontend and validate User/Admin sign-in, booking, QR, gate, and parking-map workflows. |
+| Phase 7 | Test AI slot analysis, audit logs, fee reports, monitoring evidence, cost review, and cleanup. |
 
-## 9. Expected outcome
+## 9. Expected Results
 
-- Drivers can sign in, select a period, and reserve an available parking space.
-- The system issues QR codes and maintains the correct booking lifecycle.
-- Admins can monitor dashboards, process entry/exit events, and review plates.
+After completion, the Smart Parking system is expected to provide the following outcomes:
+
+- Users can sign in, select a period, and reserve an available parking slot.
+- The application issues QR codes and maintains the correct booking lifecycle.
+- Admins can monitor the dashboard, process gate events, and review plate mismatches.
 - The parking map reflects available, reserved, and occupied states.
-- Images are retained in S3 while operational data is stored in PostgreSQL/RDS.
-- Lambda and Rekognition help detect parking-space occupancy from camera images.
-- Audit logs, parking history, and simulated charges remain available for review.
-- CDK and CloudFormation provide repeatable infrastructure deployment.
+- Image evidence is stored in S3 and operational records are stored in PostgreSQL/RDS.
+- Lambda and Rekognition provide a working slot-occupancy demonstration.
+- Cognito groups, IAM policies, CloudWatch logs, and CloudFormation stacks are verifiable in the AWS Console.
+- The project owner can repeat the deployment and explain the main AWS cost drivers.
 
-## 10. Risks and mitigations
+## 10. Risks and Mitigation
 
 | Risk | Mitigation |
 |---|---|
-| The frontend cannot call FastAPI | Verify the API URL, CORS configuration, backend health, and network settings. |
-| FastAPI cannot connect to PostgreSQL/RDS | Check the connection string, secret, Security Group, and migration status. |
-| A QR event is processed more than once | Use `event_id`, booking-state validation, and idempotent processing. |
-| Images cannot be uploaded to S3 | Inspect the bucket, presigned URL, IAM policy, and URL expiration. |
-| Rekognition produces an inaccurate result | Improve camera angle and image quality, then tune the confidence threshold. |
-| AWS charges exceed expectations | Monitor Billing/Budgets and remove workshop resources after use. |
+| Frontend cannot call the FastAPI service | Check the API URL, CORS configuration, backend health, and network settings. |
+| Backend cannot connect to RDS | Check the endpoint, port, secret reference, migration status, and Security Group. |
+| Images cannot be uploaded to S3 | Check the bucket, presigned URL, IAM policy, object key, and URL expiration. |
+| QR or gate event is processed more than once | Validate booking state and use a unique `event_id` with idempotent processing. |
+| AI slot classification is inaccurate | Improve the camera angle and image quality, then tune the confidence threshold. |
+| AWS cost exceeds expectations | Monitor Billing/Budgets and stop or remove workshop resources after testing. |
 
-## 11. Future development
+## 11. Future Improvements
 
-The frontend and FastAPI can later be hosted entirely on AWS instead of a local machine or VPS. Future releases may also add plate OCR, real-time notifications, electronic payments, support for multiple parking facilities, flexible fee rules, and an automated CI/CD pipeline.
+Future releases can host the frontend and FastAPI service fully on AWS, add CloudFront and Route 53, and introduce a CI/CD pipeline. The platform can also be extended with automatic plate OCR, real-time notifications, electronic payments, multiple parking facilities, flexible pricing rules, richer occupancy analytics, and an Application Load Balancer with Auto Scaling.

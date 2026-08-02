@@ -52,6 +52,10 @@ npm run deploy -- -c deploymentMode=services-only --profile car-parking-deployer
 
 CDK tạo secret cho database trong Secrets Manager. Chỉ tham chiếu secret hoặc sử dụng nó trong môi trường backend; không sao chép password vào source.
 
+![Hai stack CloudFormation của Smart Parking đã triển khai thành công](/images/5-Workshop/aws-01-cloudformation-stacks.png)
+
+*Hình 5.3.1-1: CloudFormation xác nhận Database Stack và Services Stack đã triển khai thành công tại Region Singapore.*
+
 {{% notice warning %}}
 Luôn đọc `cdk diff` trước khi deploy. RDS trong Workshop bật mã hóa, backup ngắn hạn, deletion protection và chính sách `RETAIN`, vì vậy tài nguyên không tự biến mất khi chạy `cdk destroy`.
 {{% /notice %}}

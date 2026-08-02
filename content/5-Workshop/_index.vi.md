@@ -16,6 +16,13 @@ Workshop này trình bày quá trình xây dựng và kiểm thử **Smart Parki
 Phiên bản hiện tại triển khai theo mô hình **services-only**: Next.js và FastAPI chạy trên máy local, trong khi dữ liệu và ảnh được lưu trên các dịch vụ AWS. Hệ thống không tích hợp cổng thanh toán thật; các khoản giữ chỗ, hoàn tiền và phí cuối cùng chỉ được mô phỏng trong PostgreSQL.
 {{% /notice %}}
 
+Sau khi hoàn thành, người thực hiện có thể:
+
+- Giải thích kiến trúc Next.js, FastAPI, RDS PostgreSQL, S3, Cognito, Lambda, Rekognition và CloudWatch.
+- Chạy frontend/backend local nhưng sử dụng dữ liệu thật trên AWS.
+- Thực hiện trọn vẹn luồng đặt chỗ → QR → check-in → giám sát vị trí → check-out.
+- Kiểm tra bằng chứng hoạt động trên AWS Console mà không làm lộ thông tin bí mật.
+
 ## Nội dung Workshop
 
 1. [Tổng quan giải pháp](5.1-Workshop-overview/)
@@ -24,10 +31,3 @@ Phiên bản hiện tại triển khai theo mô hình **services-only**: Next.js
 4. [Chạy và demo hệ thống](5.4-S3-onprem/)
 5. [Kiểm tra dữ liệu và giám sát](5.5-Policy/)
 6. [Dọn dẹp và kiểm soát chi phí](5.6-Cleanup/)
-
-Sau khi hoàn thành, người thực hiện có thể:
-
-- Giải thích kiến trúc Next.js, FastAPI, RDS PostgreSQL, S3, Cognito, Lambda, Rekognition và CloudWatch.
-- Chạy frontend/backend local nhưng sử dụng dữ liệu thật trên AWS.
-- Thực hiện trọn vẹn luồng đặt chỗ → QR → check-in → giám sát vị trí → check-out.
-- Kiểm tra bằng chứng hoạt động trên AWS Console mà không làm lộ thông tin bí mật.

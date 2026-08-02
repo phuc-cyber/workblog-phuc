@@ -41,4 +41,4 @@ Sự kiện giúp em củng cố tư duy kiến trúc cloud, kiến thức bảo
 
 ### Hình ảnh tham dự
 
-<p class="workshop-img"><img src="/images/4-EventParticipated/event-photo.png" alt="Ảnh tham gia sự kiện"></p>
+<p class="workshop-img"><img src="/images/4-EventParticipated/event3-photo.png" alt="Ảnh tham gia sự kiện"></p>

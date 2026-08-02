@@ -33,7 +33,7 @@ chapter: false
 
 1. [Worklog](1-Worklog/)
 2. [Proposal](2-Proposal/)
-3. [Translated and Shared Blogs](3-BlogsPosted/)
+3. [Translated Blogs](3-BlogsPosted/)
 4. [Events Attended](4-EventParticipated/)
 5. [Workshop](5-Workshop/)
 6. [Self-Assessment](6-Self-evaluation/)

@@ -226,3 +226,51 @@ div.notices.info p {
   border-top: 30px solid #fd9827;
   background: #fff2db;
 }
+
+/* Workshop policy evidence checklist: make each verification item easy to scan. */
+#body ul:has(> li > input[type="checkbox"]) {
+  margin: 1.25rem 0 2rem;
+  padding: 0.85rem 1rem;
+  list-style: none;
+  border: 1px solid #d8e3ef;
+  border-radius: 12px;
+  background: #f6f9fc;
+  box-shadow: 0 3px 12px rgba(38, 62, 91, 0.08);
+}
+
+#body ul:has(> li > input[type="checkbox"]) > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin: 0.5rem 0;
+  padding: 0.7rem 0.85rem;
+  list-style: none;
+  border: 1px solid #e1e9f1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+#body ul:has(> li > input[type="checkbox"]) > li:first-child {
+  margin-top: 0;
+}
+
+#body ul:has(> li > input[type="checkbox"]) > li:last-child {
+  margin-bottom: 0;
+}
+
+#body ul:has(> li > input[type="checkbox"]) input[type="checkbox"] {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin: 0.12rem 0 0;
+  accent-color: #4881cd;
+}
+
+/* Keep the cost note visually grouped with the policy checklist. */
+#body h2#6-cost-validation + p {
+  margin-top: 1rem;
+  padding: 1rem 1.15rem;
+  border-left: 4px solid #4881cd;
+  border-radius: 0 8px 8px 0;
+  background: #f6f9fc;
+}

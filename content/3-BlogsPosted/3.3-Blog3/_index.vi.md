@@ -69,7 +69,10 @@ AWS DRS giúp đơn giản hóa phần replication và khởi chạy tài nguyê
 
 <p class="workshop-img"><img src="/images/3-BlogsTranslated/aws-vn-post-reliability-dr.png" alt="Bài đăng về AWS Reliability và Disaster Recovery trên AWS Study Group VN"></p>
 
+## Link bài đăng đã chia sẻ
+
+[Bài đăng Facebook](https://www.facebook.com/share/p/1JVpYN6NkA/)
+
 ## Bài viết hướng dẫn
 
 **Disaster Recovery with AWS Elastic Disaster Recovery | The First Cloud Journey**
-

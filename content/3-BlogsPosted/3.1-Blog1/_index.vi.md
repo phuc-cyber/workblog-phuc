@@ -72,7 +72,6 @@ Qua lần thử nghiệm này, mình thấy dịch vụ giúp giảm đáng kể
 
 <p class="workshop-img"><img src="/images/3-BlogsTranslated/aws-vn-post-eventbridge-scheduler.png" alt="Bài đăng Amazon EventBridge Scheduler trên AWS Study Group VN"></p>
 
-## Tài liệu tham khảo
+## Link bài đăng đã chia sẻ
 
-[What is Amazon EventBridge Scheduler? – AWS Documentation](https://docs.aws.amazon.com/scheduler/latest/UserGuide/what-is-scheduler.html)
-
+[Bài đăng Facebook](https://www.facebook.com/share/p/17ywuoYwuE/)

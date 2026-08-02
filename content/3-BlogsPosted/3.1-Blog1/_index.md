@@ -72,7 +72,6 @@ This experiment showed that the service can reduce operational effort substantia
 
 <p class="workshop-img"><img src="/images/3-BlogsTranslated/aws-vn-post-eventbridge-scheduler.png" alt="Amazon EventBridge Scheduler post shared with AWS Study Group VN"></p>
 
-## Reference
+## Shared post link
 
-[What is Amazon EventBridge Scheduler? – AWS Documentation](https://docs.aws.amazon.com/scheduler/latest/UserGuide/what-is-scheduler.html)
-
+[Facebook post](https://www.facebook.com/share/p/17ywuoYwuE/)

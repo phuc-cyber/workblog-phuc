@@ -1,12 +1,12 @@
 ---
-title: "Cleanup and Cost Control"
+title: "Clean up resources"
 date: 2026-07-30
 weight: 6
 chapter: false
 pre: " <b> 5.6. </b> "
 ---
 
-# Cleanup and Cost Control
+# Clean up resources
 
 ## Stop the local application
 

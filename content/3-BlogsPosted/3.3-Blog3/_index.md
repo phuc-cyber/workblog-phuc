@@ -69,7 +69,10 @@ AWS DRS simplifies replication and recovery-resource launching, while Transit Ga
 
 <p class="workshop-img"><img src="/images/3-BlogsTranslated/aws-vn-post-reliability-dr.png" alt="AWS Reliability and Disaster Recovery post shared with AWS Study Group VN"></p>
 
+## Shared post link
+
+[Facebook post](https://www.facebook.com/share/p/1JVpYN6NkA/)
+
 ## Guided article
 
 **Disaster Recovery with AWS Elastic Disaster Recovery | The First Cloud Journey**
-

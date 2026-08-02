@@ -16,6 +16,10 @@ pre: " <b> 5.3.2. </b> "
 4. Kiểm tra trạng thái thành công và các tab **Resources**, **Events**, **Outputs**.
 5. Làm tương tự với `SmartParkingWorkshopServicesStack`.
 
+![Kiểm tra trạng thái CloudFormation](/images/5-Workshop/aws-01-cloudformation-stacks.png)
+
+*Hình 5.3.2-1: Hai stack của ứng dụng đều có trạng thái triển khai thành công.*
+
 Database stack phải có:
 
 - RDS PostgreSQL instance.
@@ -28,6 +32,10 @@ Services stack phải có:
 - Cognito User Pool, App Client và hai group `USER`/`ADMIN`.
 - Lambda Python 3.12 cho camera vị trí.
 - IAM policy giới hạn quyền truy cập đúng bucket, Lambda và User Pool.
+
+![Các Lambda function đã triển khai](/images/5-Workshop/aws-05-lambda-functions.png)
+
+*Hình 5.3.2-2: Services Stack đã tạo Lambda xử lý AI và Lambda quản lý thời gian lưu log.*
 
 ## Ghi lại output an toàn
 
@@ -49,3 +57,7 @@ Không đưa giá trị password bên trong secret vào báo cáo hoặc ảnh c
 - RDS có trạng thái `Available`.
 - S3, Cognito và Lambda xuất hiện ở đúng Region.
 - Không có API Gateway hoặc CloudFront trong chế độ `services-only`; đây là thiết kế hiện tại, không phải lỗi deploy.
+
+![Cơ sở dữ liệu PostgreSQL của Smart Parking đang khả dụng](/images/5-Workshop/aws-04-rds-database.png)
+
+*Hình 5.3.2-3: Cơ sở dữ liệu PostgreSQL đang ở trạng thái khả dụng trên Amazon RDS.*

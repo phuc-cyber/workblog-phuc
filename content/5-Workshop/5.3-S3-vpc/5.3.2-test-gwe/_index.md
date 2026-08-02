@@ -16,6 +16,10 @@ pre: " <b> 5.3.2. </b> "
 4. Confirm a successful status and inspect **Resources**, **Events**, and **Outputs**.
 5. Repeat for `SmartParkingWorkshopServicesStack`.
 
+![CloudFormation stack validation](/images/5-Workshop/aws-01-cloudformation-stacks.png)
+
+*Figure 5.3.2-1: The two application stacks report successful deployment states.*
+
 The database stack should contain:
 
 - An RDS PostgreSQL instance.
@@ -28,6 +32,10 @@ The services stack should contain:
 - A Cognito User Pool, App Client, and `USER`/`ADMIN` groups.
 - A Python 3.12 Lambda for slot-camera analysis.
 - A runtime IAM policy restricted to the required bucket, Lambda, and User Pool.
+
+![Deployed Lambda functions](/images/5-Workshop/aws-05-lambda-functions.png)
+
+*Figure 5.3.2-2: The services stack created the AI-processing and log-retention Lambda functions.*
 
 ## Record outputs safely
 
@@ -49,3 +57,7 @@ Do not include the password stored inside the secret in the report or screenshot
 - RDS reports `Available`.
 - S3, Cognito, and Lambda are visible in the selected Region.
 - API Gateway and CloudFront are absent in `services-only` mode by design; this is not a deployment failure.
+
+![Available Smart Parking PostgreSQL database](/images/5-Workshop/aws-04-rds-database.png)
+
+*Figure 5.3.2-3: The PostgreSQL database is available in Amazon RDS.*

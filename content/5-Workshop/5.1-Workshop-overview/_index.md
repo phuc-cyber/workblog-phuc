@@ -30,7 +30,7 @@ Traditional parking facilities depend heavily on paper tickets and manual operat
 
 ## Current architecture
 
-![Smart Parking architecture on AWS](/images/5-Workshop/smart-parking-architecture-aws.png)
+![Smart Parking system overview on AWS](/images/5-Workshop/smart-parking-solution-overview.png?v=4)
 
 | Component | Responsibility |
 |---|---|
@@ -48,15 +48,5 @@ Rekognition is used only for **parking-slot monitoring**. The current implementa
 {{% /notice %}}
 
 ## Business lifecycle
-
-![QR and parking-session flow](/images/5-Workshop/smart-parking-flow.svg)
-
-```text
-Booking/QR: PENDING → ACTIVE → CLOSED
-                    ↘ CANCELLED
-                    ↘ EXPIRED
-
-Slot: AVAILABLE → RESERVED → OCCUPIED → AVAILABLE
-```
 
 Each gate operation uses a unique `event_id` to reduce duplicate processing. Separate entry and exit images are retained, state transitions are recorded in the audit log, and the final simulated fee is calculated from the parking duration.

@@ -30,7 +30,7 @@ Bãi xe truyền thống thường phụ thuộc vào vé giấy và thao tác t
 
 ## Kiến trúc đang sử dụng
 
-![Kiến trúc Smart Parking trên AWS](/images/5-Workshop/smart-parking-architecture-aws.png)
+![Sơ đồ tổng quan hệ thống Smart Parking trên AWS](/images/5-Workshop/smart-parking-solution-overview.png?v=4)
 
 | Thành phần | Vai trò |
 |---|---|
@@ -48,15 +48,5 @@ Rekognition chỉ được dùng cho **camera vị trí đỗ**. Phiên bản hi
 {{% /notice %}}
 
 ## Vòng đời nghiệp vụ
-
-![Luồng QR và phiên gửi xe](/images/5-Workshop/smart-parking-flow.svg)
-
-```text
-Booking/QR: PENDING → ACTIVE → CLOSED
-                    ↘ CANCELLED
-                    ↘ EXPIRED
-
-Vị trí đỗ: AVAILABLE → RESERVED → OCCUPIED → AVAILABLE
-```
 
 Mỗi lần xử lý cổng có một `event_id` duy nhất để hạn chế xử lý trùng. Hệ thống lưu riêng ảnh lúc vào và lúc ra, ghi audit log cho các thay đổi trạng thái, đồng thời tính phí cuối cùng dựa trên thời gian gửi xe.
