@@ -1,59 +1,74 @@
 ---
-title : "Test the Interface Endpoint"
-date : 2024-01-01
-weight : 3
-chapter : false
-pre : " <b> 5.4.3 </b> "
+title: "Admin Check-in and Check-out"
+date: 2026-07-30
+weight: 3
+chapter: false
+pre: " <b> 5.4.3. </b> "
 ---
 
-#### Get the regional DNS name of S3 interface endpoint
-1. From the Amazon VPC menu, choose Endpoints.
+# Admin Check-in and Check-out
 
-2. Click the name of newly created endpoint: s3-interface-endpoint. Click details and save the regional DNS name of the endpoint (the first one) to your text-editor for later use. 
+## Entry check-in
 
-![dns name](/images/5-Workshop/5.4-S3-onprem/dns.png)
+1. Sign in with the `ADMIN` role.
+2. Open **Gate Control** and select **Entry Gate**.
+3. Scan the QR from the User screen or enter a demo token.
+4. Open the webcam/select an image and capture the entry plate.
+5. The Admin reads the plate in the image and enters it in the form.
+6. Select **Process check-in**.
 
+![Admin gate-control screen](/images/5-Workshop/05-admin-gate-control.png)
 
-#### Connect to EC2 instance in "VPC On-prem"
+*Figure 5.4.3-1: The Admin scans a QR, captures a plate image, and processes check-in or check-out at the gate.*
 
-1. Navigate to **Session manager** by typing "session manager" in the search box 
+The application:
 
-2. Click **Start Session**, and select the EC2 instance named **Test-Interface-Endpoint**. This EC2 instance is running in "VPC On-prem" and will be used to test connectivty to Amazon S3 through the Interface endpoint we just created. Session Manager will open a new browser tab with a shell prompt: **sh-4.2 $**
+- Confirms that the QR is valid and currently `PENDING`.
+- Requests a presigned URL and uploads the image to the S3 `plates/` prefix.
+- Normalizes the plate by uppercasing and removing separators.
+- Creates a `parking_session` and `gate_event`.
+- Changes the booking/QR to `ACTIVE` and the slot to `OCCUPIED`.
+- Records the check-in time and an audit event.
 
-![Start session](/images/5-Workshop/5.4-S3-onprem/start-session.png)
+{{% notice warning %}}
+The gate image is evidence for the Admin to enter and verify the plate. The workshop does not call Rekognition OCR or an automatic OCR model for license plates.
+{{% /notice %}}
 
-3. Change to the ssm-user's home directory with command "cd ~"
+## Exit check-out
 
-4. Create a file named testfile2.xyz
-```
-fallocate -l 1G testfile2.xyz
-```
+1. Select **Exit Gate**.
+2. Scan the same QR used at entry.
+3. The system loads the `ACTIVE` session, entry image, assigned slot, and recorded plate.
+4. Capture/upload a new exit image.
+5. The Admin enters the observed exit plate and confirms the vehicle exit.
 
-![user](/images/5-Workshop/5.4-S3-onprem/cli1.png)
+If the normalized plates match:
 
+- The session and booking become `CLOSED`.
+- The QR closes and the slot returns to `AVAILABLE`.
+- The system calculates duration-based fees and records `final_fee`, `refund_amount`, or `additional_amount`.
+- The exit image and gate event are retained.
 
-5. Copy file to the same S3 bucket we created in section 3.2
+![Simulated revenue report](/images/5-Workshop/07-admin-revenue.png)
 
-```
-aws s3 cp --endpoint-url https://bucket.<Regional-DNS-Name> testfile2.xyz s3://<your-bucket-name>
-``` 
-+ This command requires the --endpoint-url parameter, because you need to use the endpoint-specific DNS name to access S3 using an Interface endpoint.
-+ Do not include the leading ' * ' when copying/pasting the regional DNS name.
-+ Provide your S3 bucket name created earlier
+*Figure 5.4.3-2: The revenue page summarizes holds, final fees, refunds, and additional charges across parking sessions.*
 
-![copy file](/images/5-Workshop/5.4-S3-onprem/cli2.png)
+If they do not match:
 
+- The session becomes `REVIEW_REQUIRED`.
+- Vehicle exit is not automatically confirmed.
+- An Admin reviews both images, enters the corrected plate, and provides a reason.
+- Every decision is written to the audit log.
 
-Now the file has been added to your S3 bucket. Let check your S3 bucket in the next step.
+## Test cases
 
-#### Check Object in S3 bucket
+| Scenario | Expected result |
+|---|---|
+| Scan a processed check-in QR again | No duplicate session |
+| Expired or cancelled QR | Check-in rejected |
+| Matching entry/exit plates | Session may close |
+| Mismatched plates | `REVIEW_REQUIRED` |
+| Admin denies checkout | Session remains active |
+| S3 upload fails | No partial business-state transition |
 
-1. Navigate to S3 console
-2. Click Buckets
-3. Click the name of your bucket and you will see testfile2.xyz has been added to your bucket
-
-![check bucket](/images/5-Workshop/5.4-S3-onprem/check-bucket.png)
-
-
-
-
+![QR and parking-session flow](/images/5-Workshop/smart-parking-flow.svg)

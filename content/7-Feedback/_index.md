@@ -6,42 +6,40 @@ chapter: false
 pre: " <b> 7. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
+# Sharing and Feedback
 
-> Here, you can freely share your personal opinions about your experience participating in the First Cloud AI Journey program. This will help the FCAJ team improve any shortcomings based on the following aspects:
+The **First Cloud AI Journey (FCAJ)** program gave me an opportunity to approach AWS through structured, hands-on learning. In addition to studying the underlying concepts, I participated in workshops, attended technical sharing sessions, and applied what I learned to the **Car Parking** project. This experience helped me better understand how an application is designed, tested, deployed, and presented through technical documentation.
 
-### Overall Evaluation
+## Learning experience
 
-**1. Working Environment**  
-The working environment is very friendly and open. FCAJ members are always willing to help whenever I encounter difficulties, even outside working hours. The workspace is tidy and comfortable, helping me focus better. However, I think it would be nice to have more social gatherings or team bonding activities to strengthen relationships.
+The program emphasizes practical application and encourages participants to conduct independent research. While developing the project, I practiced connecting the frontend, backend, and database while learning how to select AWS services that fit the responsibilities of each system component.
 
-**2. Support from Mentor / Team Admin**  
-The mentor provides very detailed guidance, explains clearly when I don’t understand, and always encourages me to ask questions. The admin team supports administrative tasks, provides necessary documents, and creates favorable conditions for me to work effectively. I especially appreciate that the mentor allows me to try and solve problems myself instead of just giving the answer.
+Challenges involving environment configuration, troubleshooting, and end-to-end testing also became valuable learning opportunities. Investigating causes, comparing different solutions, and recording the results helped me develop a more careful and systematic way of working.
 
-**3. Relevance of Work to Academic Major**  
-The tasks I was assigned align well with the knowledge I learned at university, while also introducing me to new areas I had never encountered before. This allowed me to both strengthen my foundational knowledge and gain practical skills.
+## Support from mentors and the community
 
-**4. Learning & Skill Development Opportunities**  
-During the internship, I learned many new skills such as using project management tools, teamwork skills, and professional communication in a corporate environment. The mentor also shared valuable real-world experiences that helped me better plan my career path.
+The mentors and community members were willing to provide direction whenever I encountered difficulties. I especially appreciated that the guidance did not simply provide answers. Instead, mentors suggested possible approaches, encouraged independent verification, and asked participants to explain the reasoning behind their decisions.
 
-**5. Company Culture & Team Spirit**  
-The company culture is very positive: everyone respects each other, works seriously but still keeps things enjoyable. When there are urgent projects, everyone works together and supports one another regardless of their position. This made me feel like a real part of the team, even as an intern.
+Meetups and technical sessions also introduced topics beyond the immediate project, including security, DevOps, cloud architecture, monitoring, AI, and AWS certification pathways. These practical perspectives broadened my understanding of the technology industry.
 
-**6. Internship Policies / Benefits**  
-The company provides an internship allowance and offers flexible working hours when needed. In addition, having the opportunity to join internal training sessions is a big plus.
+## What I valued most
 
----
+- The program connects foundational concepts with concrete practical exercises.
+- Participants can develop a complete project instead of working only on isolated tasks.
+- Mentors and community members provide an open environment for questions and experience sharing.
+- Technical events offer practical perspectives on AWS and career development.
+- Preparing the workshop improved my documentation and presentation skills.
 
-### Additional Questions
-- What did you find **most satisfying** during your internship?  
-- What do you think the company **should improve** for future interns?  
-- If recommending to a friend, would you **suggest they intern here**? Why or why not?  
+## Suggestions for improvement
 
----
+- Introduce smaller milestone checkpoints so participants can track progress and evaluate their work more easily.
+- Schedule periodic architecture or project reviews to identify issues earlier.
+- Provide additional guidance on AWS cost control, security, and resource cleanup after practical exercises.
+- Create more opportunities for groups to exchange ideas and compare solutions across different projects.
+- Add a focused session on report writing, evidence preparation, and effective workshop presentation.
 
-### Suggestions & Expectations
-- Do you have any suggestions to improve the internship experience?  
-- Would you like to continue this program in the future?  
-- Any other comments (free sharing):
+## Future expectations
+
+I hope the program continues its project-based approach and offers more in-depth sessions on AWS architecture, security, DevOps, and AI. If given the opportunity, I would like to remain involved in FCAJ activities, continue strengthening my cloud skills, and share the experience I have gained with new participants.
+
+Overall, the program has been valuable to both my learning process and career direction. I would recommend it to anyone who wants to explore AWS in a practical, open, and community-supported environment.

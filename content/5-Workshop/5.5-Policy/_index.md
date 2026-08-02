@@ -1,99 +1,79 @@
 ---
-title : "VPC Endpoint Policies"
-date : 2024-01-01
-weight : 5
-chapter : false
-pre : " <b> 5.5. </b> "
+title: "Validate Data and Monitoring"
+date: 2026-07-30
+weight: 5
+chapter: false
+pre: " <b> 5.5. </b> "
 ---
 
-When you create an interface or gateway endpoint, you can attach an endpoint policy to it that controls access to the service to which you are connecting. A VPC endpoint policy is an IAM resource policy that you attach to an endpoint. If you do not attach a policy when you create an endpoint, AWS attaches a default policy for you that allows full access to the service through the endpoint.
+# Validate Data and Monitoring
 
-You can create a policy that restricts access to specific S3 buckets only. This is useful if you only want certain S3 Buckets to be accessible through the endpoint.
+A successful demonstration must prove the full path from the UI to AWS instead of showing only a correct web page.
 
-In this section you will create a VPC endpoint policy that restricts access to the S3 bucket specified in the VPC endpoint policy.
+## 1. Amazon S3
 
-![endpoint diagram](/images/5-Workshop/5.5-Policy/s3-bucket-policy.png)
+Open the image bucket and inspect **Objects**:
 
-#### Connect to an EC2 instance and verify connectivity to S3
+- `plates/`: entry and exit gate images.
+- `slot-observations/`: parking-slot camera images.
 
-1. Start a new AWS Session Manager session on the instance named Test-Gateway-Endpoint. From the session, verify that you can list the contents of the bucket you created in Part 1: Access S3 from VPC:
+Keep **Block public access** enabled. The application uploads and reads images through time-limited presigned URLs.
 
-```
-aws s3 ls s3://\<your-bucket-name\>
-```
-![test](/images/5-Workshop/5.5-Policy/test1.png)
+## 2. Amazon RDS PostgreSQL
 
-The bucket contents include the two 1 GB files uploaded in earlier.
+In RDS Console, validate:
 
-2. Create a new S3 bucket; follow the naming pattern you used in Part 1, but add a '-2' to the name. Leave other fields as default and click create
+- `Available` status.
+- PostgreSQL engine.
+- Database connections while the backend is active.
+- No critical PostgreSQL log errors.
 
-![create bucket](/images/5-Workshop/5.5-Policy/create-bucket.png)
+RDS Console does not display table rows directly. Connect with pgAdmin, DBeaver, or `psql` over SSL and execute read-only queries:
 
-Successfully create bucket
+```sql
+SELECT id, user_id, slot_id, start_time, end_time, status
+FROM bookings ORDER BY id DESC LIMIT 20;
 
-![Success](/images/5-Workshop/5.5-Policy/create-bucket-success.png)
+SELECT id, booking_id, entry_plate_number, exit_plate_number,
+       entry_image_key, exit_image_key, status, match_result
+FROM parking_sessions ORDER BY id DESC LIMIT 20;
 
-3. Navigate to: Services > VPC > Endpoints, then select the Gateway VPC endpoint you created earlier. Click the Policy tab. Click Edit policy.
+SELECT id, event_type, booking_id, plate_number, image_key, decision, created_at
+FROM gate_events ORDER BY id DESC LIMIT 20;
 
-![policy](/images/5-Workshop/5.5-Policy/policy1.png)
-
-The default policy allows access to all S3 Buckets through the VPC endpoint.
-
-4. In Edit Policy console, copy & Paste the following policy, then replace yourbucketname-2 with your 2nd bucket name. This policy will allow access through the VPC endpoint to your new bucket, but not any other bucket in Amazon S3. Click Save to apply the policy.
-
-```
-{
-  "Id": "Policy1631305502445",
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "Stmt1631305501021",
-      "Action": "s3:*",
-      "Effect": "Allow",
-      "Resource": [
-      				"arn:aws:s3:::yourbucketname-2",
-       				"arn:aws:s3:::yourbucketname-2/*"
-       ],
-      "Principal": "*"
-    }
-  ]
-}
+SELECT id, slot_id, image_key, occupied, confidence, observed_at
+FROM slot_observations ORDER BY id DESC LIMIT 20;
 ```
 
-![custom policy](/images/5-Workshop/5.5-Policy/policy2.png)
+Compare each RDS `image_key` with the corresponding S3 object key.
 
-Successfully customize policy
+## 3. Lambda, Rekognition, and CloudWatch
 
-![success](/static/images/5-Workshop/5.5-Policy/success.png)
+1. Submit a slot-camera image in AI mode.
+2. Open the slot-occupancy Lambda and select **Monitor**.
+3. Confirm that `Invocations` increased and `Errors = 0` for a successful request.
+4. Open the newest CloudWatch log stream.
+5. Compare the result with the new `slot_observations` record.
 
-5. From your session on the Test-Gateway-Endpoint instance, test access to the S3 bucket you created in Part 1: Access S3 from VPC
-```
-aws s3 ls s3://<yourbucketname>
-```
+Rekognition `DetectLabels` is an on-demand request, so the Rekognition Console does not provide a separate image history.
 
-This command will return an error because access to this bucket is not permitted by your new VPC endpoint policy:
+## 4. Cognito
 
-![error](/static/images/5-Workshop/5.5-Policy/error.png)
+Inspect the User Pool, App Client, and `USER`/`ADMIN` groups. If Cognito authentication is enabled in the backend, a newly registered account should appear in Users and its assigned group. In local-auth mode, the account appears only in RDS; clearly state this configuration difference in the report.
 
-6. Return to your home directory on your EC2 instance ` cd~ `
+## 5. Evidence checklist
 
-+ Create a file ```fallocate -l 1G test-bucket2.xyz ```
-+ Copy file to 2nd bucket ```aws s3 cp test-bucket2.xyz s3://<your-2nd-bucket-name>```
+- [ ] Both CloudFormation stacks deployed successfully.
+- [ ] RDS is `Available` and contains records from the demo.
+- [ ] S3 contains both `plates/` and `slot-observations/` images.
+- [ ] Booking moved `PENDING → ACTIVE → CLOSED`.
+- [ ] Slot moved `AVAILABLE → RESERVED → OCCUPIED → AVAILABLE`.
+- [ ] Lambda received a new invocation and CloudWatch contains its log.
+- [ ] RDS contains the corresponding slot-camera result.
+- [ ] A plate mismatch created `REVIEW_REQUIRED` and an audit event.
+- [ ] Screenshots contain no secret, token, or password.
+- [ ] API Gateway/CloudFront are correctly described as absent in `services-only` mode.
 
-![success](/static/images/5-Workshop/5.5-Policy/test2.png)
+## 6. Cost validation
 
-This operation succeeds because it is permitted by the VPC endpoint policy.
-
-![success](/static/images/5-Workshop/5.5-Policy/test2-success.png)
-
-+ Then we test access to the first bucket by copy the file to 1st bucket `aws s3 cp test-bucket2.xyz s3://<your-1st-bucket-name>`
-
-![fail](/static/images/5-Workshop/5.5-Policy/test2-fail.png)
-
-This command will return an error because access to this bucket is not permitted by your new VPC endpoint policy.
-
-#### Part 3 Summary:
-
-In this section, you created a VPC endpoint policy for Amazon S3, and used the AWS CLI to test the policy. AWS CLI actions targeted to your original S3 bucket failed because you applied a policy that only allowed access to the second bucket you created. AWS CLI actions targeted for your second bucket succeeded because the policy allowed them. These policies can be useful in situations where you need to control access to resources through VPC endpoints.
-
-
+Open **Billing and Cost Management → Cost Explorer**, group by Service, and review RDS, S3, Lambda, Rekognition, CloudWatch, and Secrets Manager. RDS is the most important continuously running workshop resource; a Budget sends alerts but does not stop services.

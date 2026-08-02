@@ -1,58 +1,38 @@
 ---
 title: "Worklog Tuần 12"
-date: 2024-01-01
-weight: 2
+date: 2026-07-01
+weight: 12
 chapter: false
-pre: " <b> 1.12 </b> "
+pre: " <b> 1.12. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
 
-### Mục tiêu tuần 12:
+# Tuần 12: Kiểm thử tổng thể và hoàn thiện Workblog
 
-* Kết nối, làm quen với các thành viên trong First Cloud AI Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+**Thời gian:** 27/07/2026 - 11/08/2026
 
-### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCAJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
+## Mục tiêu
 
+- Kiểm thử toàn bộ luồng User và Admin.
+- Ghi lại hình ảnh giao diện thật cùng kết quả triển khai.
+- Hoàn thiện Worklog, Proposal, Workshop và báo cáo cuối kỳ.
 
-### Kết quả đạt được tuần 12:
+## Công việc thực hiện
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+| Ngày | Nội dung |
+| --- | --- |
+| 27/07/2026 | Kiểm thử đăng nhập, phân quyền, đặt chỗ và vòng đời QR. |
+| 29/07/2026 | Kiểm thử cổng, biển số, trạng thái vị trí, audit log và phí. |
+| 31/07/2026 | Chạy database migration, demo data và kiểm tra các dịch vụ AWS. |
+| 04/08/2026 | Chụp giao diện User/Admin và sắp xếp ảnh minh chứng. |
+| 07/08/2026 | Viết lại nội dung song ngữ cho Worklog, Proposal và Workshop. |
+| 11/08/2026 | Rà soát liên kết, build Hugo, kiểm tra chi phí và dọn tài nguyên. |
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
+## Kết quả
 
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
+- Các luồng chính của Car Parking hoạt động theo đúng thiết kế.
+- Báo cáo sử dụng ảnh thật và nội dung thống nhất với mã nguồn.
+- Workblog được hoàn thiện ở cả tiếng Việt và tiếng Anh.
 
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
+## Tổng kết
 
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
-
-
+Dự án giúp kết nối kiến thức frontend, backend, database, AWS và Infrastructure as Code trong một quy trình hoàn chỉnh từ phân tích đến kiểm thử và viết tài liệu.

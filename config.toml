@@ -1,4 +1,4 @@
-baseURL = "https://workshop-sample.awsfcaj.com/"
+baseURL = "https://phuc-cyber.github.io/workblog-phuc/"
 relativeURLs = false
 canonifyURLs = false
 defaultContentLanguage = "en"
@@ -16,7 +16,7 @@ home = [ "HTML", "RSS", "JSON"]
   # Git hub repo link
   editURL = ""
   description = ""
-  author = "thienlh@thienlu.com"
+  author = "phucnhse182775@fpt.edu.vn"
   showVisitedLinks = true
   disableBreadcrumb = false
   disableNextPrev = false

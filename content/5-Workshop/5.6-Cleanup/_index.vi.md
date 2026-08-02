@@ -1,37 +1,57 @@
 ---
-title : "Dọn dẹp tài nguyên"
-date : 2024-01-01
-weight : 6
-chapter : false
-pre : " <b> 5.6. </b> "
+title: "Dọn dẹp và kiểm soát chi phí"
+date: 2026-07-30
+weight: 6
+chapter: false
+pre: " <b> 5.6. </b> "
 ---
 
-#### Dọn dẹp tài nguyên
+# Dọn dẹp và kiểm soát chi phí
 
-Xin chúc mừng bạn đã hoàn thành xong lab này!
-Trong lab này, bạn đã học về các mô hình kiến trúc để truy cập Amazon S3 mà không sử dụng Public Internet.
+## Dừng ứng dụng local
 
-+ Bằng cách tạo Gateway endpoint, bạn đã cho phép giao tiếp trực tiếp giữa các tài nguyên EC2 và Amazon S3, mà không đi qua Internet Gateway.
-Bằng cách tạo Interface endpoint, bạn đã mở rộng kết nối S3 đến các tài nguyên chạy trên trung tâm dữ liệu trên chỗ của bạn thông qua AWS Site-to-Site VPN hoặc Direct Connect.
+Dừng frontend bằng `Ctrl + C`, sau đó:
 
-#### Dọn dẹp
-1. Điều hướng đến Hosted Zones trên phía trái của bảng điều khiển Route 53. Nhấp vào tên của  s3.us-east-1.amazonaws.com zone. Nhấp vào Delete và xác nhận việc xóa bằng cách nhập từ khóa "delete".
+```powershell
+cd D:\Car-Parking
+docker compose --env-file .env.aws.local -f docker-compose.yml -f docker-compose.aws.yml down
+```
 
-![hosted zone](/images/5-Workshop/5.6-Cleanup/delete-zone.png)
+Lệnh này chỉ dừng container local. Nó **không** xóa dữ liệu RDS, ảnh S3 hoặc các tài nguyên AWS.
 
-2. Disassociate Route 53 Resolver Rule - myS3Rule from "VPC Onprem" and Delete it. 
+## Dọn dữ liệu demo
 
-![hosted zone](/images/5-Workshop/5.6-Cleanup/vpc.png)
+Nếu chỉ muốn làm sạch dữ liệu kiểm thử:
 
-4.Mở console của CloudFormation và xóa hai stack CloudFormation mà bạn đã tạo cho bài thực hành này:
-+ PLOnpremSetup
-+ PLCloudSetup
+1. Xác nhận đúng môi trường Workshop.
+2. Xóa object demo trong hai prefix `plates/` và `slot-observations/`, không xóa nhầm bucket khác.
+3. Chỉ xóa record demo bằng migration/script đã được kiểm tra; không chạy câu lệnh xóa rộng trên database.
+4. Giữ lại ảnh và log cần dùng làm bằng chứng trước khi xóa.
 
-![delete stack](/images/5-Workshop/5.6-Cleanup/delete-stack.png)
+## Ngừng tài nguyên AWS
 
-5. Xóa các S3 bucket
+Trước khi destroy:
 
-+ Mở bảng điều khiển S3
-+ Chọn bucket chúng ta đã tạo cho lab, nhấp chuột và xác nhận là empty. Nhấp Delete và xác nhận delete.
-+ 
-![delete s3](/images/5-Workshop/5.6-Cleanup/delete-s3.png)
+1. Chạy `cdk diff` và xác nhận đúng account/Region.
+2. Chụp hoặc xuất các bằng chứng cần thiết.
+3. Backup/snapshot RDS nếu dữ liệu còn giá trị.
+4. Kiểm tra dependency giữa stack và ứng dụng.
+
+```powershell
+cd D:\Car-Parking\infra
+npx cdk destroy -c deploymentMode=services-only --profile car-parking-deployer
+```
+
+RDS và S3 được cấu hình `RETAIN`; RDS còn có deletion protection. Vì vậy `cdk destroy` không đảm bảo xóa hoàn toàn các tài nguyên có dữ liệu.
+
+{{% notice danger %}}
+Chỉ xóa RDS/S3 vĩnh viễn khi đã được chủ tài khoản phê duyệt và đã xác nhận snapshot/backup. Sau khi xóa, dữ liệu có thể không khôi phục được.
+{{% /notice %}}
+
+## Kiểm tra sau cùng
+
+- CloudFormation không còn stack không cần thiết.
+- Không còn Lambda, log group hoặc bucket demo bị bỏ quên.
+- RDS đã được giữ lại có chủ đích hoặc đã xóa theo quy trình được phê duyệt.
+- Cost Explorer không tiếp tục tăng ngoài các tài nguyên được giữ.
+- Budget Alert vẫn hoạt động cho tài khoản.

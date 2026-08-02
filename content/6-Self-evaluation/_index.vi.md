@@ -6,35 +6,43 @@ chapter: false
 pre: " <b> 6. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
+# Tự đánh giá
 
-Trong suốt thời gian thực tập tại **[Tên công ty/tổ chức]** từ **[ngày bắt đầu]** đến **[ngày kết thúc]**, tôi đã có cơ hội học hỏi, rèn luyện và áp dụng kiến thức đã được trang bị tại trường vào môi trường làm việc thực tế.  
-Tôi đã tham gia **[mô tả ngắn gọn dự án hoặc công việc chính]**, qua đó cải thiện kỹ năng **[liệt kê kỹ năng: lập trình, phân tích, viết báo cáo, giao tiếp…]**.  
+Trong quá trình thực hiện workshop và phát triển dự án **Car Parking**, em có cơ hội vận dụng kiến thức đã học vào một sản phẩm thực tế. Công việc không chỉ dừng ở lập trình mà còn bao gồm phân tích yêu cầu, chuẩn bị frontend, backend và cơ sở dữ liệu, kiểm tra chức năng, tìm hiểu kiến trúc triển khai trên AWS và hoàn thiện tài liệu báo cáo.
 
-Về tác phong, tôi luôn cố gắng hoàn thành tốt nhiệm vụ, tuân thủ nội quy, và tích cực trao đổi với đồng nghiệp để nâng cao hiệu quả công việc.
+Thông qua dự án, em hiểu rõ hơn cách các thành phần của một hệ thống kết nối với nhau, từ giao diện người dùng, API đến dữ liệu và hạ tầng triển khai. Em cũng cải thiện khả năng tự tìm hiểu công nghệ, xử lý lỗi, quản lý tiến độ và trình bày quy trình kỹ thuật bằng nội dung cùng hình ảnh minh chứng.
 
-Để phản ánh một cách khách quan quá trình thực tập, tôi xin tự đánh giá bản thân dựa trên các tiêu chí dưới đây:
+## Bảng tự đánh giá
 
+| STT | Tiêu chí | Nội dung đánh giá | Tốt | Khá | Trung bình |
+| --- | --- | --- | :---: | :---: | :---: |
+| 1 | **Kiến thức và kỹ năng chuyên môn** | Vận dụng kiến thức lập trình, cơ sở dữ liệu và AWS vào dự án | ✅ | ☐ | ☐ |
+| 2 | **Khả năng học hỏi** | Chủ động tiếp cận công nghệ mới và áp dụng vào bài thực hành | ✅ | ☐ | ☐ |
+| 3 | **Tính chủ động** | Tự tìm tài liệu, kiểm tra hệ thống và đề xuất hướng xử lý | ☐ | ✅ | ☐ |
+| 4 | **Tinh thần trách nhiệm** | Theo sát công việc và cố gắng hoàn thành các hạng mục đã đặt ra | ✅ | ☐ | ☐ |
+| 5 | **Kỷ luật làm việc** | Tuân thủ quy trình, quản lý thời gian và lưu lại kết quả thực hiện | ✅ | ☐ | ☐ |
+| 6 | **Tinh thần cầu tiến** | Tiếp nhận góp ý và điều chỉnh sản phẩm sau mỗi lần kiểm tra | ✅ | ☐ | ☐ |
+| 7 | **Kỹ năng giao tiếp** | Trình bày tiến độ, vấn đề và kết quả công việc tương đối rõ ràng | ☐ | ✅ | ☐ |
+| 8 | **Khả năng phối hợp** | Trao đổi và hỗ trợ công việc chung khi thực hiện dự án | ✅ | ☐ | ☐ |
+| 9 | **Tác phong chuyên nghiệp** | Giữ thái độ nghiêm túc, tôn trọng góp ý và có trách nhiệm với sản phẩm | ✅ | ☐ | ☐ |
+| 10 | **Tư duy giải quyết vấn đề** | Có khả năng xác định nguyên nhân và thử nghiệm giải pháp phù hợp | ☐ | ✅ | ☐ |
+| 11 | **Mức độ đóng góp cho dự án** | Hoàn thiện các chức năng, nội dung workshop và tài liệu minh chứng | ✅ | ☐ | ☐ |
+| 12 | **Đánh giá tổng thể** | Hoàn thành mục tiêu chính và tích lũy thêm kinh nghiệm thực tế | ✅ | ☐ | ☐ |
 
-| STT | Tiêu chí                            | Mô tả                                                                                            | Tốt | Khá | Trung bình |
-| --- | ----------------------------------- | ------------------------------------------------------------------------------------------------ | --- | --- | ---------- |
-| 1   | **Kiến thức và kỹ năng chuyên môn** | Hiểu biết về ngành, áp dụng kiến thức vào thực tế, kỹ năng sử dụng công cụ, chất lượng công việc | ✅   | ☐   | ☐          |
-| 2   | **Khả năng học hỏi**                | Tiếp thu kiến thức mới, học hỏi nhanh                                                            | ☐   | ✅   | ☐          |
-| 3   | **Chủ động**                        | Tự tìm hiểu, nhận nhiệm vụ mà không chờ chỉ dẫn                                                  | ✅   | ☐   | ☐          |
-| 4   | **Tinh thần trách nhiệm**           | Hoàn thành công việc đúng hạn, đảm bảo chất lượng                                                | ✅   | ☐   | ☐          |
-| 5   | **Kỷ luật**                         | Tuân thủ giờ giấc, nội quy, quy trình làm việc                                                   | ☐   | ☐   | ✅          |
-| 6   | **Tính cầu tiến**                   | Sẵn sàng nhận feedback và cải thiện bản thân                                                     | ☐   | ✅   | ☐          |
-| 7   | **Giao tiếp**                       | Trình bày ý tưởng, báo cáo công việc rõ ràng                                                     | ☐   | ✅   | ☐          |
-| 8   | **Hợp tác nhóm**                    | Làm việc hiệu quả với đồng nghiệp, tham gia nhóm                                                 | ✅   | ☐   | ☐          |
-| 9   | **Ứng xử chuyên nghiệp**            | Tôn trọng đồng nghiệp, đối tác, môi trường làm việc                                              | ✅   | ☐   | ☐          |
-| 10  | **Tư duy giải quyết vấn đề**        | Nhận diện vấn đề, đề xuất giải pháp, sáng tạo                                                    | ☐   | ✅   | ☐          |
-| 11  | **Đóng góp vào dự án/tổ chức**      | Hiệu quả công việc, sáng kiến cải tiến, ghi nhận từ team                                         | ✅   | ☐   | ☐          |
-| 12  | **Tổng thể**                        | Đánh giá chung về toàn bộ quá trình thực tập                                                     | ✅   | ☐   | ☐          |
+## Điểm mạnh
 
-### Cần cải thiện
+- Có khả năng tự học và chủ động tìm kiếm tài liệu khi gặp công nghệ mới.
+- Biết kết nối kiến thức về frontend, backend, cơ sở dữ liệu và cloud trong cùng một dự án.
+- Có tinh thần trách nhiệm, kiên trì kiểm tra và điều chỉnh sản phẩm.
+- Có thể ghi lại quy trình thực hiện bằng tài liệu và hình ảnh tương đối đầy đủ.
 
-* Nâng cao tính kỹ luật, chấp hành nghiêm chỉnh nội quy của công ty hoặc bất kỳ trong một tổ chức nào
-* Cải thiện trong cách tư duy giải quyết vấn đề
-* Học cách giao tiếp tốt hơn trong giao tiếp hằng ngày và trong công việc, xử lý tình huống
+## Nội dung cần cải thiện
+
+- Cần nâng cao khả năng phân tích nguyên nhân gốc khi hệ thống xuất hiện lỗi phức tạp.
+- Cần trình bày vấn đề kỹ thuật ngắn gọn, chính xác và tự tin hơn.
+- Cần tìm hiểu sâu hơn về bảo mật, giám sát, tối ưu chi phí và vận hành hệ thống trên AWS.
+- Cần lập kế hoạch chi tiết hơn để phân bổ thời gian hợp lý giữa phát triển, kiểm thử và viết tài liệu.
+
+## Định hướng tiếp theo
+
+Trong thời gian tới, em sẽ tiếp tục hoàn thiện kỹ năng triển khai và vận hành ứng dụng trên AWS, bổ sung kiến thức về monitoring, bảo mật và tự động hóa. Đồng thời, em sẽ rèn luyện cách phân tích vấn đề có hệ thống, cải thiện kỹ năng trình bày và chủ động ghi chép kinh nghiệm sau mỗi giai đoạn thực hiện dự án.

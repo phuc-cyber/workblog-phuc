@@ -1,95 +1,79 @@
 ---
-title : "VPC Endpoint Policies"
-date : 2024-01-01
-weight : 5
-chapter : false
-pre : " <b> 5.5 </b> "
+title: "Kiểm tra dữ liệu và giám sát"
+date: 2026-07-30
+weight: 5
+chapter: false
+pre: " <b> 5.5. </b> "
 ---
 
-Khi bạn tạo một Interface Endpoint  hoặc cổng, bạn có thể đính kèm một chính sách điểm cuối để kiểm soát quyền truy cập vào dịch vụ mà bạn đang kết nối. Chính sách VPC Endpoint là chính sách tài nguyên IAM mà bạn đính kèm vào điểm cuối. Nếu bạn không đính kèm chính sách khi tạo điểm cuối, thì AWS sẽ đính kèm chính sách mặc định cho bạn để cho phép toàn quyền truy cập vào dịch vụ thông qua điểm cuối.
+# Kiểm tra dữ liệu và giám sát
 
-Bạn có thể tạo chính sách chỉ hạn chế quyền truy cập vào các S3 bucket cụ thể. Điều này hữu ích nếu bạn chỉ muốn một số Bộ chứa S3 nhất định có thể truy cập được thông qua điểm cuối.
+Một demo thành công cần chứng minh được luồng từ giao diện đến AWS, không chỉ dừng ở việc trang web hiển thị đúng.
 
-Trong phần này, bạn sẽ tạo chính sách VPC Endpoint hạn chế quyền truy cập vào S3 bucket được chỉ định trong chính sách VPC Endpoint.
+## 1. Amazon S3
 
-![endpoint diagram](/images/5-Workshop/5.5-Policy/s3-bucket-policy.png)
+Mở bucket ảnh → **Objects**:
 
-#### Kết nối tới EC2 và xác minh kết nối tới S3. 
+- `plates/`: ảnh tại cổng vào và cổng ra.
+- `slot-observations/`: ảnh camera vị trí đỗ.
 
-1. Bắt đầu một phiên AWS Session Manager mới trên máy chủ có tên là Test-Gateway-Endpoint. Từ phiên này, xác minh rằng bạn có thể liệt kê nội dung của bucket mà bạn đã tạo trong Phần 1: Truy cập S3 từ VPC.
+Bucket phải tiếp tục bật **Block public access**. Ứng dụng upload/xem ảnh bằng presigned URL có thời hạn.
 
-```
-aws s3 ls s3://<your-bucket-name>
-```
-![test](/images/5-Workshop/5.5-Policy/test1.png)
+## 2. Amazon RDS PostgreSQL
 
-Nội dung của bucket bao gồm hai tệp có dung lượng 1GB đã được tải lên trước đó.
+Trong RDS Console, kiểm tra:
 
-2. Tạo một bucket S3 mới; tuân thủ mẫu đặt tên mà bạn đã sử dụng trong Phần 1, nhưng thêm '-2' vào tên. Để các trường khác là mặc định và nhấp vào **Create**.
+- Status `Available`.
+- Engine PostgreSQL.
+- Kết nối database tăng khi backend hoạt động.
+- PostgreSQL log không có lỗi nghiêm trọng.
 
-![create bucket](/images/5-Workshop/5.5-Policy/create-bucket.png)
+RDS Console không hiển thị trực tiếp từng row. Kết nối bằng pgAdmin, DBeaver hoặc `psql` với SSL rồi chạy các câu lệnh chỉ đọc:
 
-3. Tạo bucket thành công.
+```sql
+SELECT id, user_id, slot_id, start_time, end_time, status
+FROM bookings ORDER BY id DESC LIMIT 20;
 
-![Success](/images/5-Workshop/5.5-Policy/create-bucket-success.png)
+SELECT id, booking_id, entry_plate_number, exit_plate_number,
+       entry_image_key, exit_image_key, status, match_result
+FROM parking_sessions ORDER BY id DESC LIMIT 20;
 
-Policy mặc định cho phép truy cập vào tất cả các S3 Buckets thông qua VPC endpoint.
+SELECT id, event_type, booking_id, plate_number, image_key, decision, created_at
+FROM gate_events ORDER BY id DESC LIMIT 20;
 
-4. Trong giao diện **Edit Policy**, sao chép và dán theo policy sau, thay thế yourbucketname-2 với tên bucket thứ hai của bạn. Policy này sẽ cho phép truy cập đến bucket mới thông qua VPC endpoint, nhưng không cho phép truy cập đến các bucket còn lại. Chọn **Save** để kích hoạt policy.
-
-
-```
-{
-  "Id": "Policy1631305502445",
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "Stmt1631305501021",
-      "Action": "s3:*",
-      "Effect": "Allow",
-      "Resource": [
-      				"arn:aws:s3:::yourbucketname-2",
-       				"arn:aws:s3:::yourbucketname-2/*"
-       ],
-      "Principal": "*"
-    }
-  ]
-}
+SELECT id, slot_id, image_key, occupied, confidence, observed_at
+FROM slot_observations ORDER BY id DESC LIMIT 20;
 ```
 
-![custom policy](/images/5-Workshop/5.5-Policy/policy2.png)
+Đối chiếu `image_key` trong RDS với object key tương ứng trong S3.
 
-Cấu hình policy thành công.
+## 3. Lambda, Rekognition và CloudWatch
 
-![success](/images/5-Workshop/5.5-Policy/success.png)
+1. Gửi một ảnh camera vị trí ở chế độ AI.
+2. Mở Lambda phát hiện vị trí → tab **Monitor**.
+3. Xác nhận `Invocations` tăng và `Errors = 0` cho luồng thành công.
+4. Mở CloudWatch log stream mới nhất.
+5. Đối chiếu kết quả với record mới trong `slot_observations`.
 
-5. Từ session của bạn trên Test-Gateway-Endpoint instance, kiểm tra truy cập đến S3 bucket bạn tạo ở bước đầu
+Rekognition `DetectLabels` là lời gọi on-demand, vì vậy không có danh sách lịch sử ảnh riêng trên Rekognition Console.
 
-```
-aws s3 ls s3://<yourbucketname>
-```
+## 4. Cognito
 
-Câu lệnh trả về lỗi bởi vì truy cập vào S3 bucket không có quyền trong VPC endpoint policy.
+Kiểm tra User Pool, App Client và hai group `USER`/`ADMIN`. Nếu backend bật Cognito authentication, tài khoản đăng ký mới phải xuất hiện trong Users và group tương ứng. Nếu ứng dụng đang dùng local-auth, tài khoản chỉ xuất hiện trong RDS; đây là khác biệt cấu hình cần ghi rõ khi báo cáo.
 
-![error](/images/5-Workshop/5.5-Policy/error.png)
+## 5. Checklist bằng chứng
 
-6. Trở lại home directory của bạn trên EC2 instance ```cd~```
+- [ ] Hai CloudFormation stack triển khai thành công.
+- [ ] RDS có trạng thái `Available` và có record của luồng demo.
+- [ ] S3 có cả ảnh `plates/` và `slot-observations/`.
+- [ ] Booking chuyển `PENDING → ACTIVE → CLOSED`.
+- [ ] Slot chuyển `AVAILABLE → RESERVED → OCCUPIED → AVAILABLE`.
+- [ ] Lambda có invocation mới và CloudWatch có log.
+- [ ] RDS có kết quả camera vị trí tương ứng.
+- [ ] Trường hợp biển số không khớp tạo `REVIEW_REQUIRED` và audit log.
+- [ ] Không có secret, token hoặc password trong ảnh chụp.
+- [ ] Trình bày rõ API Gateway/CloudFront chưa dùng ở chế độ `services-only`.
 
-+ Tạo file ```fallocate -l 1G test-bucket2.xyz ```
-+ Sao chép file lên bucket thứ  2 ```aws s3 cp test-bucket2.xyz s3://<your-2nd-bucket-name>```
+## 6. Kiểm tra chi phí
 
-![success](/images/5-Workshop/5.5-Policy/test2.png)
-
-Thao tác này được cho phép bởi VPC endpoint policy.
-
-![success](/images/5-Workshop/5.5-Policy/test2-success.png)
-
-Sau đó chúng ta kiểm tra truy cập vào S3 bucket đầu tiên
-
- ```aws s3 cp test-bucket2.xyz s3://<your-1st-bucket-name>```
-
- ![fail](/images/5-Workshop/5.5-Policy/test2-fail.png)
-
- Câu lệnh xảy ra lỗi bởi vì bucket không có quyền truy cập bởi VPC endpoint policy.
-
-Trong phần này, bạn đã tạo chính sách VPC Endpoint cho Amazon S3 và sử dụng AWS CLI để kiểm tra chính sách. Các hoạt động AWS CLI liên quan đến bucket S3 ban đầu của bạn thất bại vì bạn áp dụng một chính sách chỉ cho phép truy cập đến bucket thứ hai mà bạn đã tạo. Các hoạt động AWS CLI nhắm vào bucket thứ hai của bạn thành công vì chính sách cho phép chúng. Những chính sách này có thể hữu ích trong các tình huống khi bạn cần kiểm soát quyền truy cập vào tài nguyên thông qua VPC Endpoint.
+Mở **Billing and Cost Management → Cost Explorer**, nhóm theo Service và xem chi phí RDS, S3, Lambda, Rekognition, CloudWatch và Secrets Manager. RDS là tài nguyên chạy liên tục đáng chú ý nhất; Budget chỉ cảnh báo chứ không tự dừng dịch vụ.

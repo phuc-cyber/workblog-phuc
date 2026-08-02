@@ -1,20 +1,36 @@
 ---
-title : "Access S3 from on-premises"
-date : 2024-01-01
-weight : 4
-chapter : false
-pre : " <b> 5.4. </b> "
+title: "Run and Demonstrate the System"
+date: 2026-07-30
+weight: 4
+chapter: false
+pre: " <b> 5.4. </b> "
 ---
 
-#### Overview
+# Run and Demonstrate the System
 
-+ In this section, you will create an Interface endpoint to access Amazon S3 from a simulated on-premises environment. The Interface endpoint will allow you to route to Amazon S3 over a VPN connection from your simulated on-premises environment.
+This section connects the local application to the deployed AWS services and demonstrates the complete business workflow.
 
-+ Why using **Interface endpoint**: 
-    + Gateway endpoints only work with resources running in the VPC where they are created. Interface endpoints work with resources running in VPC, and also resources running in on-premises environments. Connectivty from your on-premises environment to the cloud can be provided by AWS Site-to-Site VPN or AWS Direct Connect.
-    + Interface endpoints allow you to connect to services powered by AWS PrivateLink. These services include some AWS services, services hosted by other AWS customers and partners in their own VPCs (referred to as PrivateLink Endpoint Services), and supported AWS Marketplace Partner services. For this workshop, we will focus on connecting to Amazon S3.
+```text
+User selects a slot → booking + PENDING QR
+       ↓
+Admin scans QR and stores entry image → enters plate → ACTIVE
+       ↓
+Slot camera → S3 → Lambda → Rekognition → observation result
+       ↓
+Admin scans the same QR at exit → new image + plate match → CLOSED
+```
 
-![Interface endpoint architecture](/images/5-Workshop/5.4-S3-onprem/diagram3.png)
+![Smart Parking operations overview](/images/5-Workshop/04-admin-overview.png)
 
+*Figure 5.4-1: The operations center summarizes available slots, active sessions, alerts, and simulated revenue.*
 
+## Steps
 
+1. [Start the backend and frontend](5.4.1-prepare/)
+2. [User reserves a slot and receives a QR](5.4.2-create-interface-enpoint/)
+3. [Admin performs check-in and check-out](5.4.3-test-endpoint/)
+4. [Monitor parking slots with AI](5.4.4-dns-simulation/)
+
+{{% notice info %}}
+The application supports both local and S3 storage. To collect AWS evidence in this workshop, start the backend with the AWS environment file and confirm `Storage Provider = s3` on the Admin settings page.
+{{% /notice %}}

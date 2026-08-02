@@ -1,59 +1,37 @@
 ---
 title: "Worklog Tuần 9"
-date: 2024-01-01
-weight: 1
+date: 2026-07-01
+weight: 9
 chapter: false
 pre: " <b> 1.9. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
 
+# Tuần 9: Phân tích vị trí đỗ bằng Lambda và Rekognition
 
-### Mục tiêu tuần 9:
+**Thời gian:** 06/07/2026 - 12/07/2026
 
-* Kết nối, làm quen với các thành viên trong First Cloud AI Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+## Mục tiêu
 
-### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCAJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
+- Tự động xác định vị trí có xe hoặc không có xe từ ảnh camera.
+- Tách tác vụ AI khỏi FastAPI bằng AWS Lambda.
+- Lưu kết quả phân tích và log phục vụ kiểm tra.
 
+## Công việc thực hiện
 
-### Kết quả đạt được tuần 9:
+| Ngày | Nội dung |
+| --- | --- |
+| 06/07/2026 | Xác định input, output và ngưỡng confidence cho tác vụ nhận diện. |
+| 07/07/2026 | Xây dựng Lambda đọc ảnh từ S3 và gọi Amazon Rekognition. |
+| 08/07/2026 | Chuẩn hóa kết quả về trạng thái có xe hoặc không có xe. |
+| 09/07/2026 | Kết nối kết quả AI với trạng thái vị trí trong backend. |
+| 10/07/2026 | Kiểm thử nhiều ảnh và theo dõi lỗi thực thi trong CloudWatch Logs. |
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+## Kết quả
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
+- Lambda phân tích được ảnh camera mà không làm nặng FastAPI.
+- Kết quả Rekognition được chuyển thành trạng thái đơn giản cho nghiệp vụ.
+- CloudWatch lưu đủ log để kiểm tra lỗi và thời gian xử lý.
 
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
+## Liên hệ sản phẩm
 
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
-
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
-
-
+AI chỉ hỗ trợ giám sát vị trí đỗ; biển số tại cổng vẫn do Admin quan sát và nhập.

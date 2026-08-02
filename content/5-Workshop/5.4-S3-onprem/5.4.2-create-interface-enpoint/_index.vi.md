@@ -1,43 +1,60 @@
 ---
-title : "Tạo một S3 Interface endpoint"
-date : 2024-01-01
-weight : 2
-chapter : false
-pre : " <b> 5.4.2 </b> "
+title: "User đặt chỗ và nhận QR"
+date: 2026-07-30
+weight: 2
+chapter: false
+pre: " <b> 5.4.2. </b> "
 ---
 
-Trong phần này, bạn sẽ tạo và kiểm tra Interface Endpoint  S3 bằng cách sử dụng môi trường truyền thống mô phỏng.
+# User đặt chỗ và nhận QR
 
-1. Quay lại Amazon VPC menu. Trong thanh điều hướng bên trái, chọn Endpoints, sau đó click Create Endpoint.
+## 1. Đăng nhập User
 
-2. Trong Create endpoint console:
-+ Đặt tên interface endpoint
-+ Trong Service category, chọn **aws services** 
+Mở trang `http://localhost:3000`, đăng nhập bằng tài khoản role `USER`. Khi Cognito được bật, người dùng mới phải xác minh email bằng mã OTP; trong chế độ local-auth, backend xác thực tài khoản trong PostgreSQL.
 
-![name](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint1.png)
+![Màn hình đăng nhập Smart Parking](/images/5-Workshop/01-login.png)
 
-3.  Trong Search box, gõ S3 và nhấn Enter. Chọn endpoint có tên com.amazonaws.us-east-1.s3. Đảm bảo rằng cột Type có giá trị Interface.
+*Hình 5.4.2-1: Giao diện đăng nhập phân quyền User và Admin của hệ thống Smart Parking.*
 
-![service](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint2.png)
+## 2. Chọn thời gian và vị trí
 
-4. Đối với VPC, chọn VPC Cloud từ drop-down.
-{{% notice warning %}}
-Đảm bảo rằng bạn chọn "VPC Cloud" và không phải "VPC On-prem"
+1. Mở tab **Đặt chỗ**.
+2. Chọn bãi xe và thời gian đến.
+3. Chọn thời lượng gửi xe.
+4. Tải lại sơ đồ để hệ thống tính các vị trí trống trong đúng khoảng thời gian.
+5. Chọn một vị trí `AVAILABLE`.
+
+Backend kiểm tra các booking trùng thời gian trước khi chấp nhận yêu cầu. Vị trí không thể được hai người đặt cùng một khoảng thời gian.
+
+![Giao diện User chọn vị trí đỗ xe](/images/5-Workshop/02-user-booking.png)
+
+*Hình 5.4.2-2: User chọn bãi xe, thời gian và vị trí còn trống trên sơ đồ trực quan.*
+
+## 3. Tạo booking
+
+Sau khi xác nhận:
+
+- Booking được tạo ở trạng thái `PENDING`.
+- Vị trí chuyển sang `RESERVED`.
+- QR chứa token ngẫu nhiên gắn với booking.
+- Hệ thống ghi khoản giữ chỗ mô phỏng, mặc định `20.000 VND`.
+- QR chưa chứa và chưa gắn biển số.
+
+```text
+User + Slot + Time range
+          ↓
+Booking PENDING + simulated hold
+          ↓
+Opaque QR token
+```
+
+## 4. Kiểm tra kết quả
+
+- QR hiển thị trong danh sách booking đang hoạt động.
+- Lịch sử hiển thị thời gian, vị trí và trạng thái phí.
+- RDS có record mới trong `bookings`, `qr_codes` và `fee_summaries`.
+- S3 chưa bắt buộc có ảnh vì xe chưa đến cổng.
+
+{{% notice info %}}
+QR dùng chung cho cả check-in và check-out. Token có vòng đời và trạng thái trên server; ứng dụng không tin vào dữ liệu do client tự khai báo.
 {{% /notice %}}
-+ Mở rộng **Additional settings** và đảm bảo rằng Enable DNS name *không* được chọn (sẽ sử dụng điều này trong phần tiếp theo của workshop)
-
-![vpc](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint3.png)
-
-5. Chọn 2 subnets trong AZs sau: us-east-1a and us-east-1b
-
-![subnets](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint4.png)
-
-6. Đối với Security group, chọn SGforS3Endpoint:
-
-![sg](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint5.png)
-
-7. Giữ default policy - full access và click Create endpoint
-
-![success](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint-success.png)
-
-Chúc mừng bạn đã tạo thành công S3 interface endpoint. Ở bước tiếp theo, chúng ta sẽ kiểm tra interface endpoint.

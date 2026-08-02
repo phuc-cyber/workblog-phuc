@@ -1,55 +1,74 @@
 ---
-title : "Kiểm tra Interface Endpoint"
-date : 2024-01-01
-weight : 3
-chapter : false
-pre : " <b> 5.4.3 </b> "
+title: "Admin check-in và check-out"
+date: 2026-07-30
+weight: 3
+chapter: false
+pre: " <b> 5.4.3. </b> "
 ---
 
-#### Lấy regional DNS name (tên DNS khu vực) của S3 interface endpoint
-1. Trong Amazon VPC menu, chọn Endpoints.
+# Admin check-in và check-out
 
-2. Click tên của endpoint chúng ta mới tạo ở mục 4.2: s3-interface-endpoint. Click details và lưu lại regional DNS name của endpoint (cái đầu tiên) vào text-editor của bạn để dùng ở các bước sau.
+## Check-in tại cổng vào
 
-![dns name](/images/5-Workshop/5.4-S3-onprem/dns.png)
+1. Đăng nhập role `ADMIN`.
+2. Mở tab **Điều khiển cổng** và chọn **Cổng vào**.
+3. Quét QR từ màn hình User hoặc nhập token demo.
+4. Mở webcam/chọn ảnh và chụp biển số lúc vào.
+5. Admin đọc biển số trên ảnh rồi nhập vào form.
+6. Bấm **Xử lý check-in**.
 
-#### Kết nối đến EC2 instance ở trong "VPC On-prem" (giả lập môi trường truyền thống)
+![Giao diện Admin điều khiển cổng](/images/5-Workshop/05-admin-gate-control.png)
 
-1. Đi đến **Session manager** bằng cách gõ "session manager" vào ô tìm kiếm
+*Hình 5.4.3-1: Admin quét QR, chụp ảnh biển số và xử lý check-in hoặc check-out tại cổng.*
 
-2. Click **Start Session**, chọn EC2 instance có tên **Test-Interface-Endpoint**. EC2 instance này đang chạy trên "VPC On-prem" và sẽ được sử dụng để kiểm tra kết nối đến Amazon S3 thông qua Interface endpoint. Session Manager sẽ mở 1 browser tab mới với shell prompt: **sh-4.2 $**
+Ứng dụng thực hiện:
 
-![Start session](/images/5-Workshop/5.4-S3-onprem/start-session.png)
+- Kiểm tra QR đang ở trạng thái `PENDING` và còn hiệu lực.
+- Xin presigned URL, upload ảnh vào S3 prefix `plates/`.
+- Chuẩn hóa biển số bằng cách chuyển thành chữ hoa và bỏ ký tự phân cách.
+- Tạo `parking_session` và `gate_event`.
+- Chuyển booking/QR sang `ACTIVE` và vị trí sang `OCCUPIED`.
+- Ghi thời gian check-in cùng audit log.
 
-3. Đi đến ssm-user's home directory với lệnh "cd ~"
+{{% notice warning %}}
+Ảnh cổng là bằng chứng để Admin nhập và kiểm tra biển số. Workshop không gọi Rekognition OCR hoặc mô hình OCR tự động cho biển số.
+{{% /notice %}}
 
-4. Tạo 1 file tên testfile2.xyz
-```
-fallocate -l 1G testfile2.xyz
-```
+## Check-out tại cổng ra
 
-![user](/images/5-Workshop/5.4-S3-onprem/cli1.png)
+1. Chọn **Cổng ra**.
+2. Quét lại đúng QR đã dùng khi vào.
+3. Hệ thống tải thông tin phiên đang `ACTIVE`, ảnh lúc vào, vị trí và biển số đã ghi.
+4. Chụp/upload ảnh mới tại cổng ra.
+5. Admin nhập biển số nhìn thấy trên ảnh và xác nhận cho xe ra.
 
-5. Copy file vào S3 bucket mình tạo ở section 4.2
-```
-aws s3 cp --endpoint-url https://bucket.<Regional-DNS-Name> testfile2.xyz s3://<your-bucket-name>
-``` 
-+ Câu lệnh này yêu cầu thông số --endpoint-url, bởi vì bạn cần sử dụng DNS name chỉ định cho endpoint để truy cập vào S3 thông qua Interface endpoint.
-+ Không lấy ' * ' khi copy/paste tên DNS khu vực.
-+ Cung cấp tên S3 bucket của bạn
+Nếu hai biển số sau khi chuẩn hóa khớp nhau:
 
-![copy file](/images/5-Workshop/5.4-S3-onprem/cli2.png)
+- Session và booking chuyển sang `CLOSED`.
+- QR đóng và vị trí trở lại `AVAILABLE`.
+- Hệ thống tính phí theo thời gian, ghi `final_fee`, `refund_amount` hoặc `additional_amount`.
+- Ảnh ra và gate event được lưu.
 
-Bây giờ tệp đã được thêm vào bộ chứa S3 của bạn. Hãy kiểm tra bộ chứa S3 của bạn trong bước tiếp theo.
+![Báo cáo doanh thu mô phỏng](/images/5-Workshop/07-admin-revenue.png)
 
-#### Kiểm tra Object trong S3 bucket
+*Hình 5.4.3-2: Trang doanh thu tổng hợp phí giữ chỗ, phí cuối, khoản hoàn và khoản thu thêm của các phiên gửi xe.*
 
-1. Đi đến S3 console
-2. Click Buckets
-3. Click tên bucket của bạn và bạn sẽ thấy testfile2.xyz đã được thêm vào s3 bucket của bạn
+Nếu không khớp:
 
-![check bucket](/images/5-Workshop/5.4-S3-onprem/check-bucket.png)
+- Session chuyển sang `REVIEW_REQUIRED`.
+- Xe chưa được tự động xác nhận ra.
+- Admin phải mở hàng đợi duyệt, đối chiếu ảnh, nhập biển số đúng và lý do xử lý.
+- Mọi quyết định được ghi audit log.
 
+## Trường hợp cần kiểm thử
 
+| Tình huống | Kết quả mong đợi |
+|---|---|
+| Quét lại QR check-in đã xử lý | Không tạo session trùng |
+| QR hết hạn hoặc đã hủy | Từ chối check-in |
+| Biển số vào/ra khớp | Cho phép đóng session |
+| Biển số không khớp | Chuyển `REVIEW_REQUIRED` |
+| Admin từ chối checkout | Session vẫn hoạt động |
+| Upload S3 lỗi | Không chuyển trạng thái nghiệp vụ một nửa |
 
-
+![Luồng QR và phiên gửi xe](/images/5-Workshop/smart-parking-flow.svg)

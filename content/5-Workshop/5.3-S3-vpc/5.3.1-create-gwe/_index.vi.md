@@ -1,40 +1,57 @@
 ---
-title : "Tạo một Gateway Endpoint"
-date : 2024-01-01 
-weight : 1
-chapter : false
-pre : " <b> 5.3.1 </b> "
+title: "Chuẩn bị và triển khai bằng CDK"
+date: 2026-07-30
+weight: 1
+chapter: false
+pre: " <b> 5.3.1. </b> "
 ---
 
-1. Mở [Amazon VPC console](https://us-east-1.console.aws.amazon.com/vpc/home?region=us-east-1#Home:)
-2. Trong thanh điều hướng, chọn **Endpoints**, click **Create Endpoint**:
+# Chuẩn bị và triển khai bằng CDK
 
-{{% notice note %}}
-Bạn sẽ thấy 6 điểm cuối VPC hiện có hỗ trợ AWS Systems Manager (SSM). Các điểm cuối này được Mẫu CloudFormation triển khai tự động cho workshop này.
+## 1. Cài dependency
+
+```powershell
+cd D:\Car-Parking\infra
+npm install
+python -m pip install -r requirements.txt
+```
+
+## 2. Xác minh AWS account và Region
+
+```powershell
+aws sts get-caller-identity --profile car-parking-deployer
+aws configure get region --profile car-parking-deployer
+```
+
+Kết quả phải đúng account được phép triển khai và Region `ap-southeast-1`.
+
+## 3. Tổng hợp và xem thay đổi
+
+Đối với stack dịch vụ:
+
+```powershell
+npm run synth -- -c deploymentMode=services-only
+npm run diff -- -c deploymentMode=services-only --profile car-parking-deployer
+```
+
+Đối với RDS, chỉ cho phép IP công khai hiện tại kết nối cổng `5432`:
+
+```powershell
+npm run synth -- -c deploymentMode=database-only -c allowedClientCidr=YOUR_PUBLIC_IP/32
+npm run diff -- -c deploymentMode=database-only -c allowedClientCidr=YOUR_PUBLIC_IP/32 --profile car-parking-deployer
+```
+
+Thay `YOUR_PUBLIC_IP` bằng IP được phê duyệt. Không dùng `0.0.0.0/0`.
+
+## 4. Triển khai
+
+```powershell
+npm run deploy -- -c deploymentMode=database-only -c allowedClientCidr=YOUR_PUBLIC_IP/32 --profile car-parking-deployer
+npm run deploy -- -c deploymentMode=services-only --profile car-parking-deployer
+```
+
+CDK tạo secret cho database trong Secrets Manager. Chỉ tham chiếu secret hoặc sử dụng nó trong môi trường backend; không sao chép password vào source.
+
+{{% notice warning %}}
+Luôn đọc `cdk diff` trước khi deploy. RDS trong Workshop bật mã hóa, backup ngắn hạn, deletion protection và chính sách `RETAIN`, vì vậy tài nguyên không tự biến mất khi chạy `cdk destroy`.
 {{% /notice %}}
-
-![endpoint](/images/5-Workshop/5.3-S3-vpc/endpoints.png)
-
-3. Trong Create endpoint console:
-+ Đặt tên cho endpoint: s3-gwe
-+ Trong service category, chọn **aws services**
-
-![endpoint](/images/5-Workshop/5.3-S3-vpc/create-s3-gwe1.png)
-
-+ Trong **Services**, gõ "s3" trong hộp tìm kiếm và chọn dịch vụ với loại **gateway**
-
-![endpoint](/images/5-Workshop/5.3-S3-vpc/services.png)
-
-+ Đối với VPC, chọn **VPC Cloud** từ drop-down menu.
-+ Đối với Route tables, chọn bảng định tuyến mà đã liên kết với 2 subnets (lưu ý: đây không phải là bảng định tuyến chính cho VPC mà là bảng định tuyến thứ hai do CloudFormation tạo).
-
-![endpoint](/images/5-Workshop/5.3-S3-vpc/vpc.png)
-
-+ Đối với Policy, để tùy chọn mặc định là Full access để cho phép toàn quyền truy cập vào dịch vụ. Bạn sẽ triển khai VPC endpoint policy trong phần sau để chứng minh việc hạn chế quyền truy cập vào S3 bucket dựa trên các policies.
-
-![endpoint](/images/5-Workshop/5.3-S3-vpc/policy.png)
-
-+ Không thêm tag vào VPC endpoint.
-+ Click Create endpoint, click x sau khi nhận được thông báo tạo thành công.
-
-![endpoint](/images/5-Workshop/5.3-S3-vpc/complete.png)

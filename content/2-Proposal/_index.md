@@ -1,115 +1,139 @@
 ---
 title: "Proposal"
-date: 2024-01-01
+date: 2026-07-01
 weight: 2
 chapter: false
 pre: " <b> 2. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
 
-In this section, you need to summarize the contents of the workshop that you **plan** to conduct.
+# Proposal for Building Car Parking on AWS
 
-# IoT Weather Platform for Lab Research
-## A Unified AWS Serverless Solution for Real-Time Weather Monitoring
+## 1. Project name
 
-### 1. Executive Summary
-The IoT Weather Platform is designed for the ITea Lab team in Ho Chi Minh City to enhance weather data collection and analysis. It supports up to 5 weather stations, with potential scalability to 10-15, utilizing Raspberry Pi edge devices with ESP32 sensors to transmit data via MQTT. The platform leverages AWS Serverless services to deliver real-time monitoring, predictive analytics, and cost efficiency, with access restricted to 5 lab members via Amazon Cognito.
+**Building a Smart Car Parking Management Platform with AWS Services**
 
-### 2. Problem Statement
-### What’s the Problem?
-Current weather stations require manual data collection, becoming unmanageable with multiple units. There is no centralized system for real-time data or analytics, and third-party platforms are costly and overly complex.
+The project proposes a web platform that lets drivers reserve parking spaces and enables administrators to monitor parking operations. It combines a Next.js interface, FastAPI services, PostgreSQL, booking-scoped QR codes, and AWS services for authentication, image storage, monitoring, and parking-slot analysis.
 
-### The Solution
-The platform uses AWS IoT Core to ingest MQTT data, AWS Lambda and API Gateway for processing, Amazon S3 for storage (including a data lake), and AWS Glue Crawlers and ETL jobs to extract, transform, and load data from the S3 data lake to another S3 bucket for analysis. AWS Amplify with Next.js provides the web interface, and Amazon Cognito ensures secure access. Similar to Thingsboard and CoreIoT, users can register new devices and manage connections, though this platform operates on a smaller scale and is designed for private use. Key features include real-time dashboards, trend analysis, and low operational costs.
+## 2. Motivation
 
-### Benefits and Return on Investment
-The solution establishes a foundational resource for lab members to develop a larger IoT platform, serving as a study resource, and provides a data foundation for AI enthusiasts for model training or analysis. It reduces manual reporting for each station via a centralized platform, simplifying management and maintenance, and improves data reliability. Monthly costs are $0.66 USD per the AWS Pricing Calculator, with a 12-month total of $7.92 USD. All IoT equipment costs are covered by the existing weather station setup, eliminating additional development expenses. The break-even period of 6-12 months is achieved through significant time savings from reduced manual work.
+Paper tickets and manual parking procedures make it difficult to identify available spaces, verify entry and exit events, or review operational history. Drivers also have no convenient way to select a space and arrival time before reaching the facility.
 
-### 3. Solution Architecture
-The platform employs a serverless AWS architecture to manage data from 5 Raspberry Pi-based stations, scalable to 15. Data is ingested via AWS IoT Core, stored in an S3 data lake, and processed by AWS Glue Crawlers and ETL jobs to transform and load it into another S3 bucket for analysis. Lambda and API Gateway handle additional processing, while Amplify with Next.js hosts the dashboard, secured by Cognito. The architecture is detailed below:
+Car Parking addresses these limitations through role-based **User** and **Admin** applications. It also provides a practical environment for integrating **Amazon RDS**, **Amazon S3**, **Amazon Cognito**, **AWS Lambda**, **Amazon Rekognition**, **CloudWatch**, **AWS CDK**, and **CloudFormation**.
 
-![IoT Weather Station Architecture](/images/2-Proposal/edge_architecture.jpeg)
+## 3. Project objectives
 
-![IoT Weather Platform Architecture](/images/2-Proposal/platform_architecture.jpeg)
+- Build separate User and Admin workspaces with **Next.js + Fluent UI**.
+- Allow drivers to select a parking facility, arrival time, and available space.
+- Create bookings and QR codes with `PENDING`, `ACTIVE`, `CLOSED`, `CANCELLED`, or `EXPIRED` states.
+- Let Admins process check-in/check-out with QR codes, vehicle images, and manually observed plates.
+- Display spaces as `AVAILABLE`, `RESERVED`, or `OCCUPIED`.
+- Store users, bookings, QR codes, parking sessions, fees, and audit logs in **PostgreSQL/Amazon RDS**.
+- Upload gate and parking-camera images to **Amazon S3** through presigned URLs.
+- Use **Lambda + Rekognition** to determine whether a monitored space contains a vehicle.
+- Manage authentication with **Amazon Cognito** and collect logs in **CloudWatch**.
+- Define the infrastructure in **AWS CDK** and deploy it through CloudFormation.
 
-### AWS Services Used
-- **AWS IoT Core**: Ingests MQTT data from 5 stations, scalable to 15.
-- **AWS Lambda**: Processes data and triggers Glue jobs (two functions).
-- **Amazon API Gateway**: Facilitates web app communication.
-- **Amazon S3**: Stores raw data in a data lake and processed outputs (two buckets).
-- **AWS Glue**: Crawlers catalog data, and ETL jobs transform and load it.
-- **AWS Amplify**: Hosts the Next.js web interface.
-- **Amazon Cognito**: Secures access for lab users.
+## 4. Project scope
 
-### Component Design
-- **Edge Devices**: Raspberry Pi collects and filters sensor data, sending it to IoT Core.
-- **Data Ingestion**: AWS IoT Core receives MQTT messages from the edge devices.
-- **Data Storage**: Raw data is stored in an S3 data lake; processed data is stored in another S3 bucket.
-- **Data Processing**: AWS Glue Crawlers catalog the data, and ETL jobs transform it for analysis.
-- **Web Interface**: AWS Amplify hosts a Next.js app for real-time dashboards and analytics.
-- **User Management**: Amazon Cognito manages user access, allowing up to 5 active accounts.
+The current scope is a workshop and demonstration environment. Drivers can sign in, inspect the parking map, choose a period, reserve a space, receive a QR code, and review history. Administrators can monitor the dashboard, operate the gate, inspect current vehicles, review exceptions, read audit logs, and view simulated fee reports.
 
-### 4. Technical Implementation
-**Implementation Phases**
-This project has two parts—setting up weather edge stations and building the weather platform—each following 4 phases:
-- Build Theory and Draw Architecture: Research Raspberry Pi setup with ESP32 sensors and design the AWS serverless architecture (1 month pre-internship)
-- Calculate Price and Check Practicality: Use AWS Pricing Calculator to estimate costs and adjust if needed (Month 1).
-- Fix Architecture for Cost or Solution Fit: Tweak the design (e.g., optimize Lambda with Next.js) to stay cost-effective and usable (Month 2).
-- Develop, Test, and Deploy: Code the Raspberry Pi setup, AWS services with CDK/SDK, and Next.js app, then test and release to production (Months 2-3).
+Rekognition is limited to detecting whether a monitored space contains a vehicle. The present version does not perform automatic license-plate OCR. An Admin reads the gate image and enters the plate, after which the backend normalizes and compares entry and exit values. Real payment processing is also outside the current scope.
 
-**Technical Requirements**
-- Weather Edge Station: Sensors (temperature, humidity, rainfall, wind speed), a microcontroller (ESP32), and a Raspberry Pi as the edge device. Raspberry Pi runs Raspbian, handles Docker for filtering, and sends 1 MB/day per station via MQTT over Wi-Fi.
-- Weather Platform: Practical knowledge of AWS Amplify (hosting Next.js), Lambda (minimal use due to Next.js), AWS Glue (ETL), S3 (two buckets), IoT Core (gateway and rules), and Cognito (5 users). Use AWS CDK/SDK to code interactions (e.g., IoT Core rules to S3). Next.js reduces Lambda workload for the fullstack web app.
+## 5. Proposed architecture
 
-### 5. Timeline & Milestones
-**Project Timeline**
-- Pre-Internship (Month 0): 1 month for planning and old station review.
-- Internship (Months 1-3): 3 months.
-    - Month 1: Study AWS and upgrade hardware.
-    - Month 2: Design and adjust architecture.
-    - Month 3: Implement, test, and launch.
-- Post-Launch: Up to 1 year for research.
+Users and Admins access the Next.js application in a browser. The frontend calls FastAPI for authorization and business workflows. FastAPI reads and writes PostgreSQL or Amazon RDS data and creates presigned URLs for S3 image uploads. For parking-space monitoring, Lambda processes image events and invokes Rekognition to classify the space as occupied or empty. Cognito manages accounts and groups, while CloudWatch records AWS logs and metrics.
 
-### 6. Budget Estimation
-You can find the budget estimation on the [AWS Pricing Calculator](https://calculator.aws/#/estimate?id=621f38b12a1ef026842ba2ddfe46ff936ed4ab01).  
-Or you can download the [Budget Estimation File](../attachments/budget_estimation.pdf).
+![Car Parking system architecture](/images/5-Workshop/smart-parking-architecture.svg)
 
-### Infrastructure Costs
-- AWS Services:
-    - AWS Lambda: $0.00/month (1,000 requests, 512 MB storage).
-    - S3 Standard: $0.15/month (6 GB, 2,100 requests, 1 GB scanned).
-    - Data Transfer: $0.02/month (1 GB inbound, 1 GB outbound).
-    - AWS Amplify: $0.35/month (256 MB, 500 ms requests).
-    - Amazon API Gateway: $0.01/month (2,000 requests).
-    - AWS Glue ETL Jobs: $0.02/month (2 DPUs).
-    - AWS Glue Crawlers: $0.07/month (1 crawler).
-    - MQTT (IoT Core): $0.08/month (5 devices, 45,000 messages).
+<p style="text-align:center;"><em>Overall architecture of the Car Parking platform</em></p>
 
-Total: $0.7/month, $8.40/12 months
+## 6. Components and technologies
 
-- Hardware: $265 one-time (Raspberry Pi 5 and sensors).
+| Component | Responsibility |
+|---|---|
+| **Next.js + Fluent UI** | Provides separate interfaces and workspaces for Users and Admins. |
+| **FastAPI** | Exposes APIs, enforces authorization, and coordinates business workflows. |
+| **PostgreSQL / Amazon RDS** | Stores accounts, bookings, QR codes, sessions, fees, and audit logs. |
+| **Amazon S3** | Retains vehicle-gate images and monitored parking-space images. |
+| **Amazon Cognito** | Manages a User Pool with `USER` and `ADMIN` groups. |
+| **AWS Lambda + Rekognition** | Analyzes camera images to determine whether a space is occupied. |
+| **CloudWatch** | Collects logs and metrics for Lambda and RDS. |
+| **AWS CDK + CloudFormation** | Defines, reviews, and deploys infrastructure as code. |
 
-### 7. Risk Assessment
-#### Risk Matrix
-- Network Outages: Medium impact, medium probability.
-- Sensor Failures: High impact, low probability.
-- Cost Overruns: Medium impact, low probability.
+## 7. Functional design
 
-#### Mitigation Strategies
-- Network: Local storage on Raspberry Pi with Docker.
-- Sensors: Regular checks and spares.
-- Cost: AWS budget alerts and optimization.
+### 7.1 User interface
 
-#### Contingency Plans
-- Revert to manual methods if AWS fails.
-- Use CloudFormation for cost-related rollbacks.
+After signing in, a driver chooses a parking facility, arrival time, parking duration, and an available space on the map. Once the booking is created, the application provides a QR code for gate use and displays the active parking session.
 
-### 8. Expected Outcomes
-#### Technical Improvements: 
-Real-time data and analytics replace manual processes.  
-Scalable to 10-15 stations.
-#### Long-term Value
-1-year data foundation for AI research.  
-Reusable for future projects.
+<p class="workshop-img"><img src="/images/5-Workshop/01-login.png" alt="Car Parking sign-in page" /></p>
+<p style="text-align:center;"><em>Car Parking authentication interface</em></p>
+
+<p class="workshop-img"><img src="/images/5-Workshop/02-user-booking.png" alt="Driver choosing a parking space and creating a booking" /></p>
+<p style="text-align:center;"><em>Reservation interface for selecting a parking space</em></p>
+
+### 7.2 Administrator interface
+
+The Admin dashboard summarizes available spaces, vehicles currently parked, plates requiring review, location violations, and simulated revenue. Operational pages support QR processing, gate actions, parking-map inspection, and reporting.
+
+<p class="workshop-img"><img src="/images/5-Workshop/04-admin-overview.png" alt="Administrator overview dashboard" /></p>
+<p style="text-align:center;"><em>Real-time parking operations dashboard</em></p>
+
+<p class="workshop-img"><img src="/images/5-Workshop/05-admin-gate-control.png" alt="Car Parking gate-control screen" /></p>
+<p style="text-align:center;"><em>Gate workflow for check-in and check-out</em></p>
+
+<p class="workshop-img"><img src="/images/5-Workshop/06-admin-parking-map.png" alt="Administrator parking-space map" /></p>
+<p style="text-align:center;"><em>Map for monitoring the status of individual spaces</em></p>
+
+<p class="workshop-img"><img src="/images/5-Workshop/07-admin-revenue.png" alt="Simulated revenue report" /></p>
+<p style="text-align:center;"><em>Simulated fees and revenue summary</em></p>
+
+### 7.3 Backend and data
+
+FastAPI enforces access rules, creates bookings, issues QR codes, opens and closes parking sessions, and records audit events. Every gate operation carries a unique `event_id` to reduce duplicate processing. PostgreSQL stores workflow state and supports simulated fee calculations based on parking duration.
+
+![Booking and parking-session lifecycle](/images/5-Workshop/smart-parking-flow.svg)
+
+### 7.4 AWS services
+
+The workshop infrastructure uses one database stack for RDS PostgreSQL, its Security Group, and Secrets Manager. A second services stack provisions S3, Cognito, the AI Lambda, runtime IAM policy, and CloudWatch Logs. The frontend and FastAPI can currently run locally or on a VPS while using these AWS resources.
+
+![AWS services deployment model](/images/5-Workshop/smart-parking-deployment.svg)
+
+## 8. Implementation plan
+
+| Phase | Main work |
+|---|---|
+| Phase 1 | Review frontend, backend, database migrations, and demo data. |
+| Phase 2 | Prepare AWS CLI, CDK, an IAM profile, and deployment environment variables. |
+| Phase 3 | Deploy RDS PostgreSQL, its Security Group, and Secrets Manager. |
+| Phase 4 | Provision S3, Cognito, the AI Lambda, IAM policy, and CloudWatch Logs. |
+| Phase 5 | Run migrations, load demonstration data, and connect FastAPI to RDS. |
+| Phase 6 | Start the frontend and validate User/Admin, booking, QR, and gate workflows. |
+| Phase 7 | Test parking-camera analysis, audit logs, fee reports, and resource cleanup. |
+
+## 9. Expected outcome
+
+- Drivers can sign in, select a period, and reserve an available parking space.
+- The system issues QR codes and maintains the correct booking lifecycle.
+- Admins can monitor dashboards, process entry/exit events, and review plates.
+- The parking map reflects available, reserved, and occupied states.
+- Images are retained in S3 while operational data is stored in PostgreSQL/RDS.
+- Lambda and Rekognition help detect parking-space occupancy from camera images.
+- Audit logs, parking history, and simulated charges remain available for review.
+- CDK and CloudFormation provide repeatable infrastructure deployment.
+
+## 10. Risks and mitigations
+
+| Risk | Mitigation |
+|---|---|
+| The frontend cannot call FastAPI | Verify the API URL, CORS configuration, backend health, and network settings. |
+| FastAPI cannot connect to PostgreSQL/RDS | Check the connection string, secret, Security Group, and migration status. |
+| A QR event is processed more than once | Use `event_id`, booking-state validation, and idempotent processing. |
+| Images cannot be uploaded to S3 | Inspect the bucket, presigned URL, IAM policy, and URL expiration. |
+| Rekognition produces an inaccurate result | Improve camera angle and image quality, then tune the confidence threshold. |
+| AWS charges exceed expectations | Monitor Billing/Budgets and remove workshop resources after use. |
+
+## 11. Future development
+
+The frontend and FastAPI can later be hosted entirely on AWS instead of a local machine or VPS. Future releases may also add plate OCR, real-time notifications, electronic payments, support for multiple parking facilities, flexible fee rules, and an automated CI/CD pipeline.

@@ -1,57 +1,65 @@
 ---
-title : "Prepare the environment"
-date : 2024-01-01
-weight : 1
-chapter : false
-pre : " <b> 5.4.1 </b> "
+title: "Start the Backend and Frontend"
+date: 2026-07-30
+weight: 1
+chapter: false
+pre: " <b> 5.4.1. </b> "
 ---
 
-To prepare for this part of the workshop you will need to:
-+ Deploying a CloudFormation stack 
-+ Modifying a VPC route table. 
+# Start the Backend and Frontend
 
-These components work together to simulate on-premises DNS forwarding and name resolution.
+## Terminal 1 — Backend connected to AWS
 
-#### Deploy the CloudFormation stack
+Ensure that Docker Desktop is running and the AWS CLI profile is valid.
 
-The CloudFormation template will create additional services to support an on-premises simulation:
-+ One Route 53 Private Hosted Zone that hosts Alias records for the PrivateLink S3 endpoint
-+ One Route 53 Inbound Resolver endpoint that enables "VPC Cloud" to resolve inbound DNS resolution requests to the Private Hosted Zone
-+ One Route 53 Outbound Resolver endpoint that enables "VPC On-prem" to forward DNS requests for S3 to "VPC Cloud"
+```powershell
+cd D:\Car-Parking
+aws sts get-caller-identity --profile car-parking-deployer
+docker compose --env-file .env.aws.local -f docker-compose.yml -f docker-compose.aws.yml up -d --build api
+```
 
-![route 53 diagram](/images/5-Workshop/5.4-S3-onprem/route53.png)
+Apply migrations and verify the container:
 
-1. Click the following link to open the [AWS CloudFormation console](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/reinvent-endpoints-builders-session/R53CF.yaml&stackName=PLOnpremSetup). The required template will be pre-loaded into the menu. Accept all default and click Create stack.
+```powershell
+docker compose --env-file .env.aws.local -f docker-compose.yml -f docker-compose.aws.yml exec api alembic upgrade head
+docker compose --env-file .env.aws.local -f docker-compose.yml -f docker-compose.aws.yml ps
+```
 
-![Create stack](/images/5-Workshop/5.4-S3-onprem/create-stack.png)
+If demo data is required, pass passwords through separate environment variables and never publish the real values:
 
-![Button](/images/5-Workshop/5.4-S3-onprem/create-stack-button.png)
+```powershell
+docker compose --env-file .env.aws.local -f docker-compose.yml -f docker-compose.aws.yml exec -e SEED_ADMIN_PASSWORD=YOUR_ADMIN_PASSWORD -e SEED_USER_PASSWORD=YOUR_USER_PASSWORD api python scripts/seed_workshop.py
+```
 
-It may take a few minutes for stack deployment to complete. You can continue with the next step without waiting for the deployemnt to finish.
+AWS-local backend endpoints and services:
 
-#### Update on-premise private route table
+- API: `http://localhost:8001`
+- Swagger: `http://localhost:8001/docs`
+- RDS PostgreSQL instead of the local PostgreSQL container.
+- S3 uploads through presigned URLs.
+- AWS Lambda for parking-slot AI.
 
-This workshop uses a strongSwan VPN running on an EC2 instance to simulate connectivty between an on-premises datacenter and the AWS cloud. Most of the required components are provisioned before your start. To finalize the VPN configuration, you will modify the "VPC On-prem" routing table to direct traffic destined for the cloud to the strongSwan VPN instance.
+## Terminal 2 — Frontend
 
-1. Open the Amazon EC2 console 
+```powershell
+cd D:\Car-Parking\frontend
+npm install
+npm run dev
+```
 
-2. Select the instance named infra-vpngw-test. From the Details tab, copy the Instance ID and paste this into your text editor
+Open:
 
-![ec2 id](/images/5-Workshop/5.4-S3-onprem/ec2-onprem-id.png)
+- Sign-in page: `http://localhost:3000`
+- User workspace: `http://localhost:3000/user`
+- Admin workspace: `http://localhost:3000/admin`
 
-3. Navigate to the VPC menu by using the Search box at the top of the browser window.
+## Quick validation
 
-4. Click on Route Tables, select the RT Private On-prem route table, select the Routes tab, and click Edit Routes.
+1. Swagger loads and the API responds.
+2. The sign-in page displays its visual and form.
+3. A successful login redirects to the workspace for that role.
+4. Admin → Settings displays RDS/S3/Lambda integration status.
 
-![rt](/images/5-Workshop/5.4-S3-onprem/rt.png)
-
-5. Click Add route.
-+ Destination: your Cloud VPC cidr range
-+ Target: ID of your infra-vpngw-test instance (you saved in your editor at step 1)
-
-![add route](/images/5-Workshop/5.4-S3-onprem/add-route.png)
-
-6. Click Save changes
-
-
-
+{{% notice warning %}}
+Do not capture DevTools, logs, or environment files when they display connection strings, tokens, or presigned URLs. A presigned URL is time-limited but must still be treated as temporary sensitive data.
+{{% /notice %}}

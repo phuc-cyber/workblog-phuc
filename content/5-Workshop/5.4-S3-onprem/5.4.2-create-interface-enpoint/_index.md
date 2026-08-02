@@ -1,43 +1,60 @@
 ---
-title : "Create an S3 Interface endpoint"
-date : 2024-01-01
-weight : 2
-chapter : false
-pre : " <b> 5.4.2 </b> "
+title: "User Reserves a Slot and Receives a QR"
+date: 2026-07-30
+weight: 2
+chapter: false
+pre: " <b> 5.4.2. </b> "
 ---
 
-In this section you will create and test an S3 interface endpoint using the simulated on-premises environment deployed as part of this workshop.
+# User Reserves a Slot and Receives a QR
 
-1. Return to the Amazon VPC menu. In the navigation pane, choose Endpoints, then click Create Endpoint.
+## 1. Sign in as User
 
-2. In Create endpoint console:
-+ Name the interface endpoint
-+ In Service category, choose **aws services** 
+Open `http://localhost:3000` and sign in with a `USER` account. When Cognito is enabled, a new user confirms the email with an OTP; in local-auth mode, the backend authenticates the PostgreSQL account.
 
-![name](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint1.png)
+![Smart Parking sign-in screen](/images/5-Workshop/01-login.png)
 
-3.  In the Search box, type S3 and press Enter. Select the endpoint named com.amazonaws.us-east-1.s3. Ensure that the Type column indicates Interface.
+*Figure 5.4.2-1: The Smart Parking sign-in screen provides role-based access for Users and Administrators.*
 
-![service](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint2.png)
+## 2. Select time and slot
 
-4. For VPC, select VPC Cloud from the drop-down.
-{{% notice warning %}}
-Make sure to choose "VPC Cloud" and not "VPC On-prem"
+1. Open the **Reservation** tab.
+2. Select a parking lot and arrival time.
+3. Choose the parking duration.
+4. Reload the map so the system calculates availability for the exact time range.
+5. Select an `AVAILABLE` slot.
+
+The backend checks overlapping reservations before accepting the request. Two users cannot reserve the same slot for an overlapping period.
+
+![User parking-slot selection screen](/images/5-Workshop/02-user-booking.png)
+
+*Figure 5.4.2-2: A User selects the parking lot, arrival time, and an available slot from the visual map.*
+
+## 3. Create the booking
+
+After confirmation:
+
+- The booking is created as `PENDING`.
+- The slot becomes `RESERVED`.
+- A random QR token is associated with the booking.
+- A simulated hold is recorded, with a default value of `20,000 VND`.
+- The QR does not contain or bind a plate number yet.
+
+```text
+User + Slot + Time range
+          ↓
+PENDING booking + simulated hold
+          ↓
+Opaque QR token
+```
+
+## 4. Validate the result
+
+- The QR appears in the active booking list.
+- History displays the time, slot, and simulated payment state.
+- RDS contains new `bookings`, `qr_codes`, and `fee_summaries` records.
+- S3 does not require an image yet because the vehicle has not reached the gate.
+
+{{% notice info %}}
+The same QR is used for check-in and check-out. Its lifecycle and state are held on the server; the application does not trust business data declared by the client.
 {{% /notice %}}
-+ Expand **Additional settings** and ensure that Enable DNS name is *not* selected (we will use this in the next part of the workshop)
-
-![vpc](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint3.png)
-
-5. Select 2 subnets in the following AZs: us-east-1a and us-east-1b
-
-![subnets](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint4.png)
-
-6. For Security group, choose SGforS3Endpoint:
-
-![sg](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint5.png)
-
-7. Keep the default policy - full access and click Create endpoint
-
-![success](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint-success.png)
-
-Congratulation on successfully creating S3 interface endpoint. In the next step, we will test the interface endpoint.
