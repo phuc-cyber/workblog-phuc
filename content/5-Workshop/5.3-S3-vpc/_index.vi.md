@@ -17,7 +17,7 @@ Phiên bản Workshop hiện dùng hai stack:
 | `SmartParkingWorkshopDatabaseStack` | RDS PostgreSQL, Security Group, Secrets Manager |
 | `SmartParkingWorkshopServicesStack` | S3, Cognito, Lambda AI, IAM runtime policy, CloudWatch Logs |
 
-![Mô hình triển khai services-only](/images/5-Workshop/smart-parking-deployment.svg)
+![Mô hình triển khai services-only trên AWS](/images/5-Workshop/smart-parking-deployment-aws.png)
 
 Trong mô hình này, frontend và FastAPI chưa được đưa lên Lambda/API Gateway/CloudFront. Chúng chạy trên máy local hoặc có thể chuyển lên VPS sau này, nhưng vẫn sử dụng cùng RDS, S3 và Lambda AI.
 

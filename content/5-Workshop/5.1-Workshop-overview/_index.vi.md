@@ -30,7 +30,7 @@ Bãi xe truyền thống thường phụ thuộc vào vé giấy và thao tác t
 
 ## Kiến trúc đang sử dụng
 
-![Kiến trúc Smart Parking](/images/5-Workshop/smart-parking-architecture.svg)
+![Kiến trúc Smart Parking trên AWS](/images/5-Workshop/smart-parking-architecture-aws.png)
 
 | Thành phần | Vai trò |
 |---|---|

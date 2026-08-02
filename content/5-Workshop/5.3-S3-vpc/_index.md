@@ -17,7 +17,7 @@ The current workshop uses two stacks:
 | `SmartParkingWorkshopDatabaseStack` | RDS PostgreSQL, Security Group, Secrets Manager |
 | `SmartParkingWorkshopServicesStack` | S3, Cognito, AI Lambda, runtime IAM policy, CloudWatch Logs |
 
-![Services-only deployment](/images/5-Workshop/smart-parking-deployment.svg)
+![Services-only deployment on AWS](/images/5-Workshop/smart-parking-deployment-aws.png)
 
 In this mode, the frontend and FastAPI API are not deployed to Lambda/API Gateway/CloudFront. They run locally or can later move to a VPS while continuing to use the same RDS, S3, and AI Lambda resources.
 

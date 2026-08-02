@@ -30,7 +30,7 @@ Traditional parking facilities depend heavily on paper tickets and manual operat
 
 ## Current architecture
 
-![Smart Parking architecture](/images/5-Workshop/smart-parking-architecture.svg)
+![Smart Parking architecture on AWS](/images/5-Workshop/smart-parking-architecture-aws.png)
 
 | Component | Responsibility |
 |---|---|

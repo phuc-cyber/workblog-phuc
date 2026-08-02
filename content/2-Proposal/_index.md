@@ -43,7 +43,7 @@ Rekognition is limited to detecting whether a monitored space contains a vehicle
 
 Users and Admins access the Next.js application in a browser. The frontend calls FastAPI for authorization and business workflows. FastAPI reads and writes PostgreSQL or Amazon RDS data and creates presigned URLs for S3 image uploads. For parking-space monitoring, Lambda processes image events and invokes Rekognition to classify the space as occupied or empty. Cognito manages accounts and groups, while CloudWatch records AWS logs and metrics.
 
-![Car Parking system architecture](/images/5-Workshop/smart-parking-architecture.svg)
+![Car Parking system architecture on AWS](/images/5-Workshop/smart-parking-architecture-aws.png)
 
 <p style="text-align:center;"><em>Overall architecture of the Car Parking platform</em></p>
 
@@ -98,7 +98,7 @@ FastAPI enforces access rules, creates bookings, issues QR codes, opens and clos
 
 The workshop infrastructure uses one database stack for RDS PostgreSQL, its Security Group, and Secrets Manager. A second services stack provisions S3, Cognito, the AI Lambda, runtime IAM policy, and CloudWatch Logs. The frontend and FastAPI can currently run locally or on a VPS while using these AWS resources.
 
-![AWS services deployment model](/images/5-Workshop/smart-parking-deployment.svg)
+![AWS services deployment model](/images/5-Workshop/smart-parking-deployment-aws.png)
 
 ## 8. Implementation plan
 

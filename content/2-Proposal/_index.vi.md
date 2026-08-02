@@ -43,7 +43,7 @@ Rekognition chỉ được sử dụng để phát hiện trạng thái có xe t
 
 Người dùng hoặc Admin truy cập giao diện Next.js từ trình duyệt. Frontend gửi request đến FastAPI để xác thực quyền và xử lý nghiệp vụ. FastAPI đọc/ghi dữ liệu tại PostgreSQL hoặc Amazon RDS, đồng thời tạo presigned URL để tải ảnh lên S3. Khi cần kiểm tra vị trí đỗ, Lambda nhận sự kiện ảnh và sử dụng Rekognition để trả về kết quả có xe hoặc không có xe. Cognito quản lý tài khoản và nhóm quyền; CloudWatch thu thập log và metric của các dịch vụ AWS.
 
-![Kiến trúc hệ thống Car Parking](/images/5-Workshop/smart-parking-architecture.svg)
+![Kiến trúc hệ thống Car Parking theo AWS](/images/5-Workshop/smart-parking-architecture-aws.png)
 
 <p style="text-align:center;"><em>Kiến trúc tổng thể của hệ thống Car Parking</em></p>
 
@@ -98,7 +98,7 @@ FastAPI kiểm soát quyền, tạo booking, phát hành QR, mở hoặc đóng 
 
 Hạ tầng workshop sử dụng một stack database cho RDS PostgreSQL, Security Group và Secrets Manager; stack dịch vụ còn lại chứa S3, Cognito, Lambda AI, IAM policy và CloudWatch Logs. Frontend cùng FastAPI hiện có thể chạy local hoặc trên VPS trong khi vẫn kết nối các dịch vụ AWS này.
 
-![Mô hình triển khai dịch vụ AWS](/images/5-Workshop/smart-parking-deployment.svg)
+![Mô hình triển khai dịch vụ AWS](/images/5-Workshop/smart-parking-deployment-aws.png)
 
 ## 8. Kế hoạch triển khai
 
