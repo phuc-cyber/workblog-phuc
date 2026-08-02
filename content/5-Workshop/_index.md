@@ -1,5 +1,5 @@
 ---
-title: "Workshop: Smart Parking System"
+title: "SUMMER-STORE Deployment Workshop on AWS"
 date: 2026-07-30
 weight: 5
 chapter: false

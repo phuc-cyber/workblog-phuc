@@ -1,5 +1,5 @@
 ﻿---
-title: "Events Attended"
+title: "Events Participated"
 date: 2026-07-01
 weight: 4
 chapter: false
@@ -38,5 +38,4 @@ Throughout my internship, I took part in several programs organized by the AWS/F
 &emsp;**Location:** 26th Floor, Bitexco Tower, 02 Hai Trieu Street, Saigon Ward, Ho Chi Minh City
 
 &emsp;**Role:** Attendee
-
 
