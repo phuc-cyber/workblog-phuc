@@ -49,6 +49,19 @@ Nếu hai biển số sau khi chuẩn hóa khớp nhau:
 - Hệ thống tính phí theo thời gian, ghi `final_fee`, `refund_amount` hoặc `additional_amount`.
 - Ảnh ra và gate event được lưu.
 
+### Tính phí và xử lý thời gian đỗ lâu hơn dự kiến
+
+Backend lấy khoảng thời gian từ `entry_at` đến thời điểm check-out, làm tròn lên theo giờ và luôn tính tối thiểu một giờ. Phí cuối được tính theo công thức:
+
+```text
+phí cuối = số giờ thực tế (làm tròn lên) × đơn giá mô phỏng mỗi giờ
+```
+
+- Nếu `final_fee` thấp hơn khoản giữ chỗ, phần chênh lệch được ghi vào `refund_amount`.
+- Nếu xe đỗ lâu hơn làm `final_fee` cao hơn khoản giữ chỗ, phần vượt được ghi vào `additional_amount`.
+- Đây là số liệu mô phỏng; hệ thống không tự động gọi cổng thanh toán hoặc thu tiền thật.
+- Booking `EXPIRED` là trường hợp không đến check-in sau thời gian chờ, không phải xe đã vào bãi rồi đỗ quá giờ.
+
 ![Báo cáo doanh thu mô phỏng](/images/5-Workshop/07-admin-revenue.png)
 
 *Hình 5.4.3-2: Trang doanh thu tổng hợp phí giữ chỗ, phí cuối, khoản hoàn và khoản thu thêm của các phiên gửi xe.*
@@ -69,6 +82,8 @@ Nếu không khớp:
 | Biển số vào/ra khớp | Cho phép đóng session |
 | Biển số không khớp | Chuyển `REVIEW_REQUIRED` |
 | Admin từ chối checkout | Session vẫn hoạt động |
+| Xe ở lại lâu hơn thời gian dự kiến | Tính theo thời lượng thực tế và ghi `additional_amount` nếu phí vượt khoản giữ chỗ |
+| Booking `PENDING` không check-in sau thời gian chờ | Booking và QR chuyển `EXPIRED`, vị trí trở lại `AVAILABLE` |
 | Upload S3 lỗi | Không chuyển trạng thái nghiệp vụ một nửa |
 
 ![Luồng QR và phiên gửi xe](/images/5-Workshop/smart-parking-flow.svg)

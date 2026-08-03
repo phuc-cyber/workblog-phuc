@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 2. </b> "
 ---
 
-# Proposal
-
 # Proposal for Deploying the Smart Parking Project on AWS
 
 ## 1. Project Title
@@ -95,6 +93,10 @@ The database uses PostgreSQL on Amazon RDS. It stores account references, parkin
 ### 7.4 Payment
 
 The current project does not connect to a real payment gateway. Instead, the backend calculates a simulated fee from parking duration and exposes the result to the Admin revenue view. This keeps the workshop focused on booking, gate, data, and AWS-service integration while leaving electronic payment as a future extension.
+
+The billable duration starts at check-in and ends when an Admin confirms check-out. The backend rounds the elapsed time up to whole hours, with a minimum of one hour, and multiplies it by the simulated hourly rate. It then compares the final fee with the hold: a lower final fee produces `refund_amount`, while a longer stay that raises the fee above the hold produces `additional_amount` for the Admin to review.
+
+The current version does not use a separate overtime-penalty state. A stay longer than expected is reflected by the actual elapsed duration and any additional charge calculated at check-out. The `EXPIRED` booking state has a different purpose: it applies when a user does not check in within the allowed grace period, after which the QR is invalidated and the slot becomes available again.
 
 <p class="workshop-img"><img src="/images/5-Workshop/07-admin-revenue.png" alt="Smart Parking simulated fee report" /></p>
 

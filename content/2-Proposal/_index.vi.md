@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 2. </b> "
 ---
 
-# Bản đề xuất
-
 # Đề xuất triển khai dự án Smart Parking trên AWS
 
 ## 1. Tên dự án
@@ -95,6 +93,10 @@ Database sử dụng PostgreSQL trên Amazon RDS. Cơ sở dữ liệu lưu tài
 ### 7.4 Payment
 
 Dự án hiện chưa kết nối cổng thanh toán thật. Backend tính phí mô phỏng dựa trên thời lượng gửi xe và hiển thị kết quả trong màn hình doanh thu Admin. Cách làm này giữ workshop tập trung vào booking, cổng, dữ liệu và tích hợp AWS, đồng thời để thanh toán điện tử ở phần phát triển sau.
+
+Thời gian tính phí được lấy từ lúc xe check-in đến khi Admin xác nhận check-out. Backend làm tròn thời lượng lên từng giờ, tối thiểu một giờ, rồi nhân với đơn giá mô phỏng. Kết quả được so sánh với khoản giữ chỗ: nếu phí cuối thấp hơn thì hệ thống ghi `refund_amount`; nếu xe đỗ lâu hơn làm phí cuối vượt khoản giữ chỗ thì phần chênh lệch được ghi vào `additional_amount` để Admin theo dõi khoản thu thêm.
+
+Phiên bản hiện tại chưa tạo trạng thái phạt quá giờ riêng. Trường hợp xe ở lại lâu hơn thời gian dự kiến được phản ánh bằng thời lượng thực tế và khoản thu thêm khi check-out. Trạng thái booking `EXPIRED` chỉ áp dụng cho trường hợp người dùng không đến check-in sau thời gian chờ cho phép; khi đó QR hết hiệu lực và vị trí được trả về trạng thái trống.
 
 <p class="workshop-img"><img src="/images/5-Workshop/07-admin-revenue.png" alt="Báo cáo phí mô phỏng Smart Parking" /></p>
 

@@ -49,6 +49,19 @@ If the normalized plates match:
 - The system calculates duration-based fees and records `final_fee`, `refund_amount`, or `additional_amount`.
 - The exit image and gate event are retained.
 
+### Fee calculation and longer-than-expected stays
+
+The backend measures the interval from `entry_at` to check-out, rounds it up to whole hours, and always charges at least one hour. The final fee follows this formula:
+
+```text
+final fee = actual parked hours (rounded up) × simulated hourly rate
+```
+
+- If `final_fee` is lower than the hold, the difference is recorded as `refund_amount`.
+- If a longer stay raises `final_fee` above the hold, the difference is recorded as `additional_amount`.
+- These values are simulated; the system does not call a real payment gateway or collect money automatically.
+- An `EXPIRED` booking means the user missed the check-in grace period; it is not an overtime state for a vehicle already inside the parking lot.
+
 ![Simulated revenue report](/images/5-Workshop/07-admin-revenue.png)
 
 *Figure 5.4.3-2: The revenue page summarizes holds, final fees, refunds, and additional charges across parking sessions.*
@@ -69,6 +82,8 @@ If they do not match:
 | Matching entry/exit plates | Session may close |
 | Mismatched plates | `REVIEW_REQUIRED` |
 | Admin denies checkout | Session remains active |
+| Vehicle stays longer than expected | Charge the actual duration and record `additional_amount` when the fee exceeds the hold |
+| `PENDING` booking misses the check-in grace period | Booking and QR become `EXPIRED`; slot returns to `AVAILABLE` |
 | S3 upload fails | No partial business-state transition |
 
 ![QR and parking-session flow](/images/5-Workshop/smart-parking-flow.svg)

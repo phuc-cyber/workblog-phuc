@@ -22,3 +22,23 @@
   ga("create", "UA-158079754-2", "auto");
   ga("send", "pageview");
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var visitedUrls = [];
+
+    for (var index = 0; index < sessionStorage.length; index += 1) {
+      var key = sessionStorage.key(index);
+      if (key && sessionStorage.getItem(key) === "1") {
+        visitedUrls.push(new URL(key, window.location.origin).href);
+      }
+    }
+
+    document.querySelectorAll("#sidebar li[data-nav-id]").forEach(function (item) {
+      var link = item.children[0];
+      if (link && link.tagName === "A" && visitedUrls.includes(link.href)) {
+        item.classList.add("visited");
+      }
+    });
+  });
+</script>
