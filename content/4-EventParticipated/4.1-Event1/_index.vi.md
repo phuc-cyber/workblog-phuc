@@ -53,4 +53,4 @@ Kết thúc sự kiện, em có thêm kiến thức về cách học AWS an toà
 
 ### Hình ảnh tham dự
 
-<p class="workshop-img"><img src="/images/4-EventParticipated/event-photo.png" alt="Ảnh tham gia sự kiện"></p>
+<p class="workshop-img"><img src="/images/4-EventParticipated/event1-photo.png" alt="Ảnh tham gia sự kiện"></p>

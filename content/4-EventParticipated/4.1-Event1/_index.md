@@ -53,4 +53,4 @@ By the end of the event, I had strengthened my knowledge of safe AWS practice, c
 
 ### Participation image
 
-<p class="workshop-img"><img src="/images/4-EventParticipated/event-photo.png" alt="Event participation photo"></p>
+<p class="workshop-img"><img src="/images/4-EventParticipated/event1-photo.png" alt="Event participation photo"></p>
