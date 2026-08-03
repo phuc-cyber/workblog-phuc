@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.4.1. </b> "
 ---
 
-# Khởi động backend và frontend
-
 ## Terminal 1 — Backend kết nối AWS
 
 Đảm bảo Docker Desktop đang chạy và AWS CLI profile còn hiệu lực.

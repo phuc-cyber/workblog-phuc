@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.6. </b> "
 ---
 
-# Dọn dẹp và kiểm soát chi phí
-
 ## Dừng ứng dụng local
 
 Dừng frontend bằng `Ctrl + C`, sau đó:

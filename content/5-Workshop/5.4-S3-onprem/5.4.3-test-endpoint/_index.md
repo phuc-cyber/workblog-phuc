@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.4.3. </b> "
 ---
 
-# Admin Check-in and Check-out
-
 ## Entry check-in
 
 1. Sign in with the `ADMIN` role.

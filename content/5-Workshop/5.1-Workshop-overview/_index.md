@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.1. </b> "
 ---
 
-# Solution Overview
-
 ## Problem
 
 Traditional parking facilities depend heavily on paper tickets and manual operation. Operators cannot easily see real-time slot availability, trace gate history, or verify that the correct vehicle leaves the facility. This project addresses those problems with role-based **User/Admin** web applications, booking-scoped QR codes, and AWS data and AI services.

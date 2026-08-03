@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.1. </b> "
 ---
 
-# Tổng quan giải pháp
-
 ## Bài toán
 
 Bãi xe truyền thống thường phụ thuộc vào vé giấy và thao tác thủ công, khó biết chính xác vị trí nào đang trống, khó truy vết lịch sử ra/vào và dễ xảy ra sai sót khi đối chiếu xe. Dự án giải quyết bài toán này bằng một ứng dụng web có phân quyền **User/Admin**, QR theo vòng đời booking và dịch vụ lưu trữ, AI trên AWS.

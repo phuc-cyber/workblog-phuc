@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.4. </b> "
 ---
 
-# Run and Demonstrate the System
-
 This section connects the local application to the deployed AWS services and demonstrates the complete business workflow.
 
 ```text

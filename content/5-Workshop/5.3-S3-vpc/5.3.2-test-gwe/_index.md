@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.3.2. </b> "
 ---
 
-# Validate CloudFormation and Outputs
-
 ## CloudFormation
 
 1. Open AWS Console and select **Asia Pacific (Singapore)**.

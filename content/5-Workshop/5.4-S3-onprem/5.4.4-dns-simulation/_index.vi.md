@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.4.4. </b> "
 ---
 
-# AI giám sát vị trí đỗ
-
 Camera vị trí giúp so sánh trạng thái vật lý quan sát được với trạng thái mà hệ thống mong đợi.
 
 ## Luồng xử lý AWS

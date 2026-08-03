@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.3.1. </b> "
 ---
 
-# Chuẩn bị và triển khai bằng CDK
-
 ## 1. Cài dependency
 
 ```powershell

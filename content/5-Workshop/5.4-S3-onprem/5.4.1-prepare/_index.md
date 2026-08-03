@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.4.1. </b> "
 ---
 
-# Start the Backend and Frontend
-
 ## Terminal 1 — Backend connected to AWS
 
 Ensure that Docker Desktop is running and the AWS CLI profile is valid.

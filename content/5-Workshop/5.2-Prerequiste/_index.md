@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.2. </b> "
 ---
 
-# Prerequisites
-
 ## Local tools
 
 - Windows 10/11.

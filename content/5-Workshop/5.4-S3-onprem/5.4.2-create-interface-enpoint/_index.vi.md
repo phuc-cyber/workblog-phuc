@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.4.2. </b> "
 ---
 
-# User đặt chỗ và nhận QR
-
 ## 1. Đăng nhập User
 
 Mở trang `http://localhost:3000`, đăng nhập bằng tài khoản role `USER`. Khi Cognito được bật, người dùng mới phải xác minh email bằng mã OTP; trong chế độ local-auth, backend xác thực tài khoản trong PostgreSQL.

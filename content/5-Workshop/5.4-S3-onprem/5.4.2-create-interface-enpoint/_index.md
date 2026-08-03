@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.4.2. </b> "
 ---
 
-# User Reserves a Slot and Receives a QR
-
 ## 1. Sign in as User
 
 Open `http://localhost:3000` and sign in with a `USER` account. When Cognito is enabled, a new user confirms the email with an OTP; in local-auth mode, the backend authenticates the PostgreSQL account.

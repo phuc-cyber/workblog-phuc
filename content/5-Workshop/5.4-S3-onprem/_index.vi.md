@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.4. </b> "
 ---
 
-# Chạy và demo hệ thống
-
 Phần này kết nối ứng dụng local với các dịch vụ AWS đã triển khai, sau đó thực hiện luồng nghiệp vụ hoàn chỉnh.
 
 ```text

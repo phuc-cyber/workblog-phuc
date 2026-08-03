@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.3. </b> "
 ---
 
-# Deploy AWS Services
-
 Infrastructure is defined with **AWS CDK v2** in `infra/`. CDK synthesizes the Python definitions into CloudFormation templates, making deployments repeatable and reviewable through `synth` and `diff`.
 
 The current workshop uses two stacks:

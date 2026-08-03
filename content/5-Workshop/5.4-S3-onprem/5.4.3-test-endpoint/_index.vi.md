@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.4.3. </b> "
 ---
 
-# Admin check-in và check-out
-
 ## Check-in tại cổng vào
 
 1. Đăng nhập role `ADMIN`.

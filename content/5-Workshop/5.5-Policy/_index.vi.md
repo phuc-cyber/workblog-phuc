@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.5. </b> "
 ---
 
-# Kiểm tra dữ liệu và giám sát
-
 Một demo thành công cần chứng minh được luồng từ giao diện đến AWS, không chỉ dừng ở việc trang web hiển thị đúng.
 
 ## 1. Amazon S3

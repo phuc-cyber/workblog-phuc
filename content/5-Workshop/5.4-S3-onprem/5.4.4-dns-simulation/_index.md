@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.4.4. </b> "
 ---
 
-# AI Parking-Slot Monitoring
-
 Slot cameras compare the observed physical state with the state expected by the application.
 
 ## AWS processing flow

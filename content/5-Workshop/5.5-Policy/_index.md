@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.5. </b> "
 ---
 
-# Validate Data and Monitoring
-
 A successful demonstration must prove the full path from the UI to AWS instead of showing only a correct web page.
 
 ## 1. Amazon S3

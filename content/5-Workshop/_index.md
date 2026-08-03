@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5. </b> "
 ---
 
-# Building a Smart Parking System on AWS
-
 This workshop presents the implementation and validation of the **Smart Parking System**. Users reserve parking slots and receive QR codes, gate operators confirm vehicle entry and exit using the QR code and plate images, and monitored parking slots use AI to detect whether a vehicle is present.
 
 ![Smart parking facility](/images/5-Workshop/smart-parking-hero.png)

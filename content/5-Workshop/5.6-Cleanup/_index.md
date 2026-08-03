@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.6. </b> "
 ---
 
-# Clean up resources
-
 ## Stop the local application
 
 Stop the frontend with `Ctrl + C`, then run:

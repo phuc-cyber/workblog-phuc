@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.3.2. </b> "
 ---
 
-# Kiểm tra CloudFormation và output
-
 ## CloudFormation
 
 1. Mở AWS Console và chọn Region **Asia Pacific (Singapore)**.

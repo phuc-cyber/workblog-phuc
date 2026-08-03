@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5. </b> "
 ---
 
-# Xây dựng hệ thống bãi giữ xe thông minh trên AWS
-
 Workshop này trình bày quá trình xây dựng và kiểm thử **Smart Parking System**: người dùng đặt trước vị trí đỗ, nhận mã QR, nhân viên cổng xác nhận xe vào/ra bằng QR và ảnh biển số, còn camera tại vị trí đỗ sử dụng AI để phát hiện có xe hoặc không có xe.
 
 ![Bãi giữ xe thông minh](/images/5-Workshop/smart-parking-hero.png)

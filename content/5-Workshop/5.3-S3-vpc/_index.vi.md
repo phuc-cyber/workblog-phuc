@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.3. </b> "
 ---
 
-# Triển khai dịch vụ AWS
-
 Hạ tầng được khai báo bằng **AWS CDK v2** trong thư mục `infra/`. CDK tổng hợp mã Python thành CloudFormation template để việc triển khai có thể lặp lại và kiểm tra bằng `synth`/`diff`.
 
 Phiên bản Workshop hiện dùng hai stack:

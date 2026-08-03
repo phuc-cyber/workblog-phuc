@@ -6,8 +6,6 @@ chapter: false
 pre: " <b> 5.2. </b> "
 ---
 
-# Điều kiện chuẩn bị
-
 ## Công cụ local
 
 - Windows 10/11.
