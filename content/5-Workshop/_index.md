@@ -16,7 +16,7 @@ The current environment uses a **services-only** deployment: Next.js and FastAPI
 
 ## Project source
 
-[Smart Parking source code on GitHub](https://github.com/phuc-cyber/car-parking)
+[Smart Parking source code on GitHub](https://github.com/phuc-cyber/carparking)
 
 After completing the workshop, participants can:
 

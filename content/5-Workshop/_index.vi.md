@@ -16,7 +16,7 @@ Phiên bản hiện tại triển khai theo mô hình **services-only**: Next.js
 
 ## Project source
 
-[Mã nguồn Smart Parking trên GitHub](https://github.com/phuc-cyber/car-parking)
+[Mã nguồn Smart Parking trên GitHub](https://github.com/phuc-cyber/carparking)
 
 Sau khi hoàn thành, người thực hiện có thể:
 
