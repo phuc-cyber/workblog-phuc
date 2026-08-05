@@ -14,6 +14,10 @@ This workshop presents the implementation and validation of the **Smart Parking 
 The current environment uses a **services-only** deployment: Next.js and FastAPI run locally while application data and images use AWS services. No real payment gateway is connected; holds, refunds, and final fees are simulated in PostgreSQL.
 {{% /notice %}}
 
+## Project source
+
+[Smart Parking source code on GitHub](https://github.com/phuc-cyber/car-parking)
+
 After completing the workshop, participants can:
 
 - Explain the Next.js, FastAPI, RDS PostgreSQL, S3, Cognito, Lambda, Rekognition, and CloudWatch architecture.

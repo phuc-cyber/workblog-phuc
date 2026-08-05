@@ -14,6 +14,10 @@ Workshop này trình bày quá trình xây dựng và kiểm thử **Smart Parki
 Phiên bản hiện tại triển khai theo mô hình **services-only**: Next.js và FastAPI chạy trên máy local, trong khi dữ liệu và ảnh được lưu trên các dịch vụ AWS. Hệ thống không tích hợp cổng thanh toán thật; các khoản giữ chỗ, hoàn tiền và phí cuối cùng chỉ được mô phỏng trong PostgreSQL.
 {{% /notice %}}
 
+## Project source
+
+[Mã nguồn Smart Parking trên GitHub](https://github.com/phuc-cyber/car-parking)
+
 Sau khi hoàn thành, người thực hiện có thể:
 
 - Giải thích kiến trúc Next.js, FastAPI, RDS PostgreSQL, S3, Cognito, Lambda, Rekognition và CloudWatch.

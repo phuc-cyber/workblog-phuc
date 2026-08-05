@@ -274,3 +274,9 @@ div.notices.info p {
   border-radius: 0 8px 8px 0;
   background: #f6f9fc;
 }
+
+/* Keep the profile card aligned with the home-page content. */
+#body img[src$="avatar-phuc.jpg"] {
+  margin-left: 0;
+  margin-right: auto;
+}
